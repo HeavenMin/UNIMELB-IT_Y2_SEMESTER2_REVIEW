@@ -1,5 +1,16 @@
+---
+typora-copy-images-to: ./image
+---
+
 # COMP90051 Statistical Machine Learning
-#Review/ML
+#### Review/ML
+
+`Author: Min Gao`
+
+> `important aspects`
+>
+> Basis expansion, representation, optimisation, loss functions, regularisation, overfitting
+
 ---
 ## L1 - Introduction Probability Theory
 ### ML system consist of
@@ -11,12 +22,12 @@
 
 ### Learning
 * __supervised learning__
-	* Labelled
-	* predict labels on new instances
+  * Labelled
+  * predict labels on new instances
 * __unsupervised learning__
-	* Unlabelled
-	* cluster related instances
-	* understand attribute relationships
+  * Unlabelled
+  * cluster related instances
+  * understand attribute relationships
 
 ### Evaluation
 * Pick an __evaluation metric__ comparing label vs prediction
@@ -30,8 +41,7 @@
 > When data poor, using __cross-validation__
 
 ### Random Variables (r.v.’s)
-[r.v.](https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F) :
-A random variable X is a numeric function.
+[r.v.](https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F) : A random variable X is a numeric function.
 
 ### Expectation and Variance
 $E[X]$ is the r.v. X’s “average” value
@@ -46,14 +56,19 @@ $$
 ### Bayes’s Theorem
 * $P(A \cap B) = P(A|B)P(B) = P(B|A)P(A)$
 * $P(A|B) = \dfrac {P(B|A)P(A)}{P(B)}$
-	* Marginals: probabilities of individual variables
-	* Marginalisation: summing away all but r.v.’s of interest
+  * Marginals: probabilities of individual variables
+  * Marginalisation: summing away all but r.v.’s of interest
 ####Bayes's rule applies to Bayesian modelling
 $P(parameters|data) = \dfrac {P(data|parameters)P(parameters)}{P(data)}$
 * posterior = whole expression
+
 * likelihood = $P(data|parameters)$
+
 * prior = $P(parameters)$
+
 * marginal likelihood = $P(data)$
+
+  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot.png)
 ---
 ## L2 - Statistical schools
 ### MLE- Maximun-likelihood Estimation
@@ -70,17 +85,308 @@ __$= argmax_\theta P(X = x|\theta)P(\theta)$__ `MAP`
 * optimise to find best parameters $\hat{\theta}$
 
 ### Parametetric vs Non-parametric Models
-Parametric | Non-parametric
----------- | --------------
-Determined by fixed, finite number of parameters | Number of parameters grows with data, infinite
-Limited flexibility | More flexible
-Efficient statistically and computationally | Less Efficient
+| Parametric                               | Non-parametric                           |
+| ---------------------------------------- | ---------------------------------------- |
+| Determined by fixed, finite number of parameters | Number of parameters grows with data, infinite |
+| Limited flexibility                      | More flexible                            |
+| Efficient statistically and computationally | Less Efficient                           |
 
 ### Generative vs. Discriminative Models
 * For G: Model full joint $P(X,Y)$
 * For D: Model conditional $P(Y|X)$ only
 ---
 ## L3 - Linear Regression & Regularisation
+
+### Loss function
+
+* 0-1 loss function
+  * $L(Y, f(X)) = \{ ^{1,Y\neq f\left( x\right) }_{0,Y=f\left( x\right) }$
+* quadratic loss function (squared loss)
+  * $L(Y,f(X)) = (Y - f(X))^2$
+* absolute loss function
+  * $L(Y,f(X)) = |Y - f(X)|$
+* logrithmic loss function
+  * $L(Y, P(Y|X)) = -logP(Y|X)$
+
+### Linear Regression
+
+> it's simple, easier to understand, computationally efficient
+
+__Example__: $H = a +bT$, find parameter values
+
+* To find $a,b$ that minimise $L=\sum ^{10}_{i=1}\left( H_{i}-\left( a+bT_{i}\right) \right) ^{2}$
+  * write derivative
+  * set to zero
+  * solve for model
+* using np.linalg.solve to solve ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/linearEquations.png)
+* __Coordinate descent__: guess a, solve for b, solve for a; repeat
+
+__Linear Regression model__: A simple model that tends to require less data and be easier to interpret.
+
+* $y \approx w_0 + \sum^{m}_{i=1}{x_iw_i}$
+
+_Trick_: add a dummy feature $x_0 = 1$ and use vector notation
+
+* $y \approx \sum^{m}_{i=0}{x_iw_i} = \boldsymbol{x'w} = \boldsymbol{x^Tw}$
+
+### Regression as a probabilistic model
+
+$y =  \boldsymbol{x^Tw} + \epsilon$
+
+$\epsilon$ is noise, using "Log trick":
+
+$\sum^{n}_{i=1}logp(y_i|\boldsymbol{x_i}) = -\dfrac {1}{2\sigma^2}\sum^{n}_{i=1}(y_i - (\boldsymbol{(x_i)^Tw})^2) + K$
+
+Therefore, under this model, maximising log-likelihood as a function of w is equivalent to minimsing the sum of squared errors.
+
+### Method of least squares
+
+The model assumes $\boldsymbol{y \approx Xw}$
+
+To find $\boldsymbol{w}$, minimise the __sum of squared errors__
+
+$L = \sum^{n}_{i=1}(y_i - \sum^{m}_{j=0}X_{ij}w_j)^2 = ||\boldsymbol{y - Xw}||^2$
+
+Setting derivative to zero and solving for $\boldsymbol{w}$ yields
+
+$\boldsymbol{\hat{w}= (X'X)^{-1}X'y}$     `normal equations`: this system is defined only if the __inverse__ exists
+
+### Regularisation
+
+> Process of introducing additional information in order to solve an ill-posed problem or to prevent overfitting ---- (wiki)  (not just for linear methods)
+
+* avoid ill-conditioning
+  * irrelevant features
+    * Feature $\boldsymbol{X}_{.j}$ is irrelevant if $\boldsymbol{X}_{.j}$ is  linear combination of other columns
+      * $\boldsymbol{X}_{.j} = \sum_{l \neq j} \alpha_l \boldsymbol{X}_{.l}$
+    * The normal equations solution: $\boldsymbol{\hat{w}= (X'X)^{-1}X'y}$. __With irrelevant features, $\boldsymbol{X'X}$ has no inverse__
+  * lack of data
+* Introduce prior knowledge
+* Constrain modelling (vary the model complexity) — to deal with __underfitting__ and __overfitting__
+  * Explicit model selection
+    * Try different classes of models
+    * use held out validation to select the model (split training data into training set and validation set)
+  * Regularisation
+    * Augment the problem: $\boldsymbol{\theta} = argmin_{\boldsymbol{\theta} \in \Theta}(L(data, \boldsymbol{\theta}) + \lambda R(\boldsymbol(\theta))$
+    * E.g. ridge regression (L2): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||^2_2$
+    * E.g. Lasso (L1): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||_1$
+    * Use held out validation/cross validation to choose $\lambda$
+
+#### L1 and L2 norms
+
+> Intuitively, norms measure lengths of vectors in some sense
+
+* L2 (Euclidean distance): $||\boldsymbol{a}||=||\boldsymbol{a}||_2 \equiv \sqrt {a^2_1+…+a^2_n}$
+* L1 (Manhattan distance): $||\boldsymbol{a}||_1 \equiv |a_1|+…+|a_n|$
+
+#### Re-conditioning the problem
+
+Using regularisation to introduce an additional condition into the system
+
+* the original problem is to minimise $||\boldsymbol{y - Xw}||^2_2$
+* The regularisation problem is to minimise $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||^2_2$ for $\lambda > 0$
+* So the solution is now $\boldsymbol{\hat{w}= (X'X} + \lambda \boldsymbol{I)^{-1}X'y}$  __`ridge regression`__
+
+#### Regulariser as a prior
+
+> TODO `question`
+
+---
+
+## L4 - Logistic Regression & Basis Expansion
+
+> logistic regerssion model is a linear method for binary classification
+
+### Methods for binary classification
+
+* Logistic regression
+* perceptron
+* SVM (support vector machines)
+
+### Logistic regression model
+
+Problem: the probability needs to be between 0 and 1. Need to squash the functio
+
+__logistic funciton__: $f(s) = \dfrac {1}{1 + exp(-s)}$ 
+
+__model__: $P(y = 1|\boldsymbol{X}) = \dfrac {1}{1 + exp(-\boldsymbol{x'w})}$
+
+if $P(y=1|\boldsymbol{x} > \dfrac {1}{2})$ then class "1", else class "0"
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8831913.png)
+
+__decision boundary__ is the line where $P(y=1|\boldsymbol{x}) = 0.5$
+
+* 就是能够将所有数据点进行很好地分类的边界
+
+
+* in higher dimensional problems, the decision boundary is a plane or hyperplane
+* vector $\boldsymbol{w}$ is perpendicular(垂直) (normal) to the decision boundary
+
+### Linear and logistic probabilistic model
+
+__Linear regression__ assumes a _Normal distribution_ with a fixed variance and mean given by linear model:
+
+$p(y|\boldsymbol{x} = Normal(y|\boldsymbol{x'w}, \sigma^2))$
+
+__Logistic regression__ assumes a Bernoulli distribution with parameter given by logistic transform of linear model:
+
+$p(y|\boldsymbol{x}) = Bernolli(y|\theta(\boldsymbol{x}) = \dfrac {1}{1 - exp(-\boldsymbol{x'w})}$
+
+Bernoulli distribution is defined as $p(y) = \theta^y(1-\theta)^{(1-y)}$ for $y \in \{0,1\}$
+
+#### Training as maximising likelihood estimation
+
+$p(y_1,….y_n|\boldsymbol{x_1,…,x_n}) = \prod^{n}_{i=1}p(y_i|\boldsymbol{x_i})$
+
+$\because p(y_i|\boldsymbol{x_i}) = \theta(\boldsymbol{x_i})^{y_i}(1-\theta (\boldsymbol{x_i}))^{(1-y_i)}$ and $\theta (\boldsymbol{x_i}) = \dfrac {1}{1 + exp(\boldsymbol{-x_i'w})}$
+
+using log trick: $\log (\prod^{n}_{i=1}p(y_i|\boldsymbol{x_i})) = \sum^n_{i=1} \log p(y_i|\boldsymbol{x_i})$
+
+$= \sum^n_{i=1} \log (\theta(\boldsymbol{x_i})^{y_i}(1-\theta (\boldsymbol{x_i}))^{(1-y_i)})$
+
+$= \sum^n_{i=1}(y_i \log (\theta(\boldsymbol{x_i})) + (1-y_i)\log (1 - \theta(\boldsymbol{x_i})))$
+
+$= \sum^n_{i=1}((y_i -1)\boldsymbol{x_i'w} - log(1+ exp(-\boldsymbol{x_i'w})))$
+
+#### Cross entropy 
+
+> is a method for comparing two distributions
+
+$H(g_{ref}, g_{est}) = -\sum_{a \in A}g_{ref}(a)\log g_{est}(a)$
+
+Logistic regression aims to estimate this distribution as
+
+$g_{est}(1) = \theta(\boldsymbol{x_i})$ and $g_{est}(0) = 1 - \theta (\boldsymbol{x_i})$
+
+#### optimisation for logistic regression
+
+Training for logistic regression is amounts to finding $\boldsymbol{w}$ that maximise log-likelihood
+
+​	same as finding $\boldsymbol{w}$ that minimise the sum of cross entropies for each training point
+
+__no closed form solution__ — `stochastic gradient descent` is used
+
+### Basis Expansion
+
+> Extending the utility of models via data transformation, can be applied for both regression and classification
+
+#### Transform the data
+
+> Map the data onto another features space, such that the data is linear in that space
+
+* Denote this transformation $\varphi :\mathbb{R} ^{m}\rightarrow \mathbb{R} ^{k}$. 
+  * if $\boldsymbol{x}$ is the original set of features 
+  * $\varphi(\boldsymbol{x})$ denotes the new set of features
+
+example for polynomial regression: $y = w_0 + w_1x + w_2x^2$
+
+```
+example:
+Consider a 2-dimensional dataset, where each point is represented by two features and the label (x1, x2, y). The features are binary, the label is the result of XOR function, and so the data consists of four points (0, 0, 0), (0, 1, 1), (1, 0, 1) and (1, 1, 0). Design a feature space transformation that would make the data linearly separable:
+Answer: new feature space (x3), where x3 = (x1 − x2)^2
+```
+
+#### RBF (Radial basis funcitons)
+
+* is a function of form $\varphi(\boldsymbol{x}) = \psi (||\boldsymbol{x-z}||)$
+* Examples: $\varphi(\boldsymbol{x}) = exp(-\dfrac {1}{\sigma}||\boldsymbol{x-z}||^2)$
+* one limitation is that the transformation needs to be defined beforehand
+
+---
+
+## L5 - Optimisation & Regularisation
+
+### Iterative Optimisation
+
+#### frequentist supervised learning
+
+* Assume a model
+  * Denote parameters of the model as $\theta$
+  * Model predictions are $\hat{f}(\boldsymbol{x,\theta})$
+* Choose a way to measure discrepancy between predictions and training label
+  * E.g. sum of squared residuals $||\boldsymbol{y - Xw}||^2$
+* Traing = parameter estimation = optimisation
+  * $\hat{\theta} = argmin_{\theta \in \Theta}L(data, \boldsymbol{\theta})$
+
+### Loss functions
+
+> using to measure discrepancy prediction and label
+
+Examples:
+
+* squared loss $l_{sq} = (y - \hat{f}(\boldsymbol{x,\theta}))^2$
+* absolute loss $l_{abs} = |y - \hat{f}(\boldsymbol{x,\theta})|$
+* preceptron loss
+* Hinge loss
+
+### Solving optimisation problems
+
+* Analytic solution
+  * known only in limited number of cases
+  * Use necessary condition: $\dfrac {\partial L}{\partial \theta_1} = …= \dfrac {\partial L}{\partial \theta_p} = 0$
+* Approximate iterative solution
+  1. Init: choose starting guess $\boldsymbol{\theta^{(1)}}$, set $i = 1$
+  2. Update: $\boldsymbol{\theta^{(i+1)}} \leftarrow SomeRule [\boldsymbol{\theta^{(i)}}]$, set $i \leftarrow i + 1$
+  3. Termination: decide whether to __Stop__
+  4. Go to step 2
+  5. __Stop__: return $\boldsymbol{\hat{\theta} \approx \theta^{(i)}}$
+
+#### Coordinate descent
+
+* Suppose $\boldsymbol{\theta} = [\theta_1,…,\theta_K]'$
+  1. Choose $\boldsymbol{\theta^{(1)}}$ and some T
+  2. For i from 1 to T*
+     1. $\boldsymbol{\theta^{(i+1)}} \leftarrow \boldsymbol{\theta^{(i)}}$
+     2. For j from 1 to K
+        1. Fix components of $\boldsymbol{\theta^{(i+1)}}$, expect j-th component
+        2. FInd $\hat{\theta}^{i+1}_j$ that minimises $L(\theta^{(i+1)}_j)$
+        3. Update j-th component of $\boldsymbol{\theta^{(i+1)}}$
+  3. Return $\boldsymbol{\hat{\theta} \approx \theta^{(i)}}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8843665.png)
+
+#### Gradient
+
+$\nabla L = \left[\dfrac {\partial L}{\partial \theta_1},…,\dfrac {\partial L}{\partial \theta_p}\right]'$ computed at point $\boldsymbol{\theta}$
+
+$\nabla$ is nabla symbol
+
+#### Gradient descent
+
+1. Choose $\boldsymbol{\theta^{(1)}}$ and some T
+2. For i from 1 to T*
+   1. $\boldsymbol{\theta^{(i+1)}} = \boldsymbol{\theta^{(i)}} - \eta\nabla L(\boldsymbol{\theta^{(i)}})$
+3. Return $\boldsymbol{\hat{\theta} \approx \theta^{(i)}}$
+
+> $\eta$ is dynamically updated in each step
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845064.png)
+
+### Bias-variance trade-off
+
+> Generalisation capacity of the model is an important consideraition
+
+Training the model is to minimisation of training error, generalisation capacity is captured by the __test error__. Also, __Model complexity__ is a major factor that influences the ability of the model to generalise.
+
+Lemma: $test Error For x_0 = (bias)^2 + variance + irreducible Error$
+
+simple model $\rightarrow$ low variance, high bias
+
+complex model  $\rightarrow$ high variance, low 
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845714.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845766.png)
+
+---
+
+## L6 - Linear Algebra & Perceptron
+
+### Dot product
+
+
+
 
 
 
