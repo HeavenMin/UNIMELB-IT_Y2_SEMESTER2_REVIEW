@@ -572,9 +572,239 @@ However, depth tends to give more accurate models
 
 > based on repeated application of small filters to patches of a 2D image or range of a 1D input
 
-__Convolution__
+__Convolution__ on 1D
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8909126.png)
+
+__Convolution__ on 2D
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8909353.png)
+
+#### Components of CNN
+
+__Convolutional layers__
+
+* Complex input representations based on convolution operation
+* Filter weights are learned from training data
+
+__Max Pooling__ usually used to downsampling, [pooling](http://www.techweb.com.cn/network/system/2017-07-13/2556494.shtml)
+
+* Re-scaling to smaller resolution, limits parameter explosion 
+
+__FC__ and output layer or softmax
+
+* Merges representations together, get final results
+
+Convolution can also use as a __regulariser__
+
+### Autoencoder
+
+> An ANN training setup that can be used for unsupervised learning or efficient coding
+
+Supervised learning:
+
+* Univariate regression: predict $y$ from $\boldsymbol{x}$
+* Multivariate regression: predict $\boldsymbol{y}$ from $\boldsymbol{x}$
+
+Unsupervised learning: explore data $\boldsymbol{x_1,…,x_n}$
+
+* No response variable
+
+For each $\boldsymbol{x_i}$ set $\boldsymbol{y_i \equiv x_i}$, Train an ANN to predict $\boldsymbol{y_i}$ from $\boldsymbol{x_i}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8910745.png)
+
+### Dimensionality reduction
+
+* Autoencoders can be used for compression and dimensionality reduction via a non-linear transformation 
+* `TODO`
+
+---
+
+## L9 - Support Vector Machine (SVM) hard margin
+
+### Maximum Margin classifier (SVM)
+
+> For binary classification problem
+
+#### linear hard margin SVM
+
+> SVM is a linear binary classifier
+
+Predict class A if $s \geq 0$ and Predict class B if $s < 0$ where $s = b + \sum^m_{i=1}x_iw_i$
+
+the different SVMs from preceptron is that the way the parameters are learned. They have different loss. If any good boundaries for the dataset is linearly separable, the perceptron loss is zero.
+
+#### choosing separation boundary (SVM)
+
+SVM aiming for the safest boundary.  To find the separation boundary that __maximises the margin__ between the classes.
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8912865.png)
+
+The points on margin boundaries from either side are called __support vectors__
+
+Distance is $||\boldsymbol{r}||=\pm \dfrac {\boldsymbol{w'x} + b}{\boldsymbol{||w||}}$
+
+Therefore, the distance from the i-th point to a  perfect boundary can be encoded as $||\boldsymbol{r_i}||= \dfrac {y_i(\boldsymbol{w'x_i} + b)}{\boldsymbol{||w||}}$
+
+Therefore, the SVMs aim to maximise $\left( min_{i=1,…,n} \dfrac {y_i(\boldsymbol{w'x_i} + b)}{\boldsymbol{||w||}}\right)$
+
+SVM has non-unique representation, because the same boundary can be expressed with infinitely many parameter combinations.
+
+__Resolving ambiguity__: rescale parameters such that $\dfrac {y_{i^*}(\boldsymbol{w'x_{i^*}} + b)}{\boldsymbol{||w||}} = \dfrac {1}{\boldsymbol{||w||}}$, $i^*$ is the distance to the closest point
+
+Therefore, we now have that SVMs aim to find $argmin_\boldsymbol{w}||\boldsymbol{w}||$ , s.t. $y_i(\boldsymbol{w'x_i} + b) \geq 1$ for $i = 1,…,n$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8915037.png)
+
+### SVM Objective as Regularised Loss
+
+$l_\infty = \{ ^{0, 1- y_i(\boldsymbol{w'x_i} + b) \leq 0}_{\infty, 1 - y_i(\boldsymbol{w'x_i} + b) > 0}$
+
+$l_\infty = \{ ^{0, 1- y(\boldsymbol{w'x} + b) \leq 0}_{\infty, otherwise}$
+
+`question`
+
+---
+
+## L10 - SVM soft margin
+
+Real data is unlikely to be linearly separabel, SVMs offer 3 approaches to address this problem:
+
+* Still use hard margin SVM, but transform the data
+* Relax the constraints
+* Combination of 1 and 2
+
+### Soft Margin SVMs to deal with Non-linearity data
+
+> we relax the constraints to allow points to be inside the margin or even on the wrong side of the boundary
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8931234.png)
+
+#### hinge loss: soft margin SVM loss
+
+$l_h = \{ ^{0, 1- y(\boldsymbol{w'x} + b) \leq 0}_{1 - y(\boldsymbol{w'x} + b), otherwise}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8929998.png)
+
+With ridge regression, soft margin SVM objective can be defined as
+
+$argmin_{\boldsymbol{w}} \left( \sum^n_{i=1}l_h(\boldsymbol{x_i},y_i,\boldsymbol{w}) + \lambda||\boldsymbol{w}||^2 \right)$
+
+#### Re-formulating soft margin objective
+
+* soft margin SVM loss (hinge loss)
+  * $l_h = \max (0,1 - y_i(\boldsymbol{w'x_i} + b))$
+* define slack variables as an upper bound on loss
+  * $\xi_i \geq l_h = \max (0,1 - y_i(\boldsymbol{w'x_i} + b))$
+* Re-write the soft margin SVM objective as:
+  * $argmin_{\boldsymbol{w},\xi} \left( \dfrac {1}{2} ||\boldsymbol{w}||^2 + C\sum^n_{i=1} \xi_i \right)$
+  * s.t. $y_i(\boldsymbol{w'x_i} + b) \geq 1 - \xi_i$ for $i = 1,…,n$  and  $\xi_i \geq 0$ for $i = 1,…n$
+
+Therefore, for __hard margin SVM__ objective:
+
+$argmin_\boldsymbol{w} \dfrac {1}{2} ||\boldsymbol{w}||^2$  `hard margin SVM`
+
+s.t. $y_i(\boldsymbol{w'x_i} + b) \geq 1$ for $i = 1,…,n$
+
+And for __soft margin SVM__ objective:
+
+$argmin_{\boldsymbol{w},\xi} \left( \dfrac {1}{2} ||\boldsymbol{w}||^2 + C\sum^n_{i=1} \xi_i \right)$  `soft margin SVM`
+
+s.t. $y_i(\boldsymbol{w'x_i} + b) \geq 1 - \xi_i$ for $i = 1,…,n$  and  $\xi_i \geq 0$ for $i = 1,…n$
+
+the constraints are relaxed ("softened") by allowing violations by $\xi_i$. 
+
+### SVM training preliminaries
+
+> is to solving the corresponding optimisation problem
+
+#### Constrained optimisation
+
+Method of Lagrange/KKT multipliers
+
+* Transform the original problem into an unconstrained optimisation problem
+* Analyse/relate necessary and sufficient conditions for solutions for both problems
+
+KKT objective:
+
+$L(\boldsymbol{x, \lambda, v}) = f(\boldsymbol{x}) + \sum^n_{i=1}\lambda_ig_i(\boldsymbol{x}) + \sum^m_{j=1}v_jh_j(\boldsymbol{x})$
+
+#### Lagrangian for hard margin SVM
+
+Define the lagrangian/KKT objective for hard margin SVM first
+
+$L_{KKT}(\boldsymbol{w}, b , \boldsymbol{\lambda}) = \dfrac {1}{2} ||\boldsymbol{w}||^2 - \sum^n_{i=1} \lambda_i(y_i(\boldsymbol{w'x_i} + b) - 1)$
+
+​			(primal objective)			(constraints)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8932266.png)
+
+Given these, in order to solve the primal problem, we pose a new optimisation problem, called __Lagrangian dual problem__ also called __(quadratic optimisation problem)__ `question`
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8932391.png)
+
+For __hard margin SVM__ training: finding $\boldsymbol{\lambda}$ that solve above formula
+
+__Marking predictions__: classify new instance x based on the sign of 
+
+$s = b^* + \sum^n_{i=1}\lambda_i^*y_i\boldsymbol{x_i'x}$
+
+$b^*$ can be found in $y_j(b^* + \sum^n_{i=1}\lambda_i^*y_i\boldsymbol{x_i'x}) = 1$
+
+The difference from __soft__ to __hard__ margin SVM is that the constaints in __soft__ is
+
+s.t. $C \geq \lambda_i \geq 0$ which in __hard__ is s.t. $\lambda_i \geq 0$ `difference between soft and hard`
+
+p.s. $1- y_i(\boldsymbol{w'x_i} + b) \leq 0$ means that $\boldsymbol{x_i}$ is outside the margin
+
+THerefore, for KKT, $\lambda_i^*$ must =0 when points outside the margin and the points with non-zero $\lambda s$ are __support vectors__
+
+---
+
+## L11 - Kernel Methods
+
+### Kernel trick
+
+> efficient computation of a dot product in transformed feature space
+
+P.s. 升维和降维都可能将本来不能二分的问题进行二分
+
+__Kernel__ is a function that can be expressed as _dot product_ in some feature space $K(\boldsymbol{u,v})=\varphi(\boldsymbol{u})' \varphi(\boldsymbol{v})$
+
+Choosing a kernel implies some transformation $\varphi (\boldsymbol{x})$, the pros of using kernels is that __we don't need to actually compute components of $\varphi (\boldsymbol{x})$__. This is beneficial when the transformed space is multidimensional. In addition, it makes it possible to transform the data into an infinite- dimensional space.
+
+#### Kernels
+
+* Polynomial kernel
+  * $K(\boldsymbol{u,v}) = (\boldsymbol{u'v} + c)^d$
+* Radial basis function (rbf) kernel (also called Gaussian kernel)
+  * $K(\boldsymbol{u,v}) = exp(-\gamma ||\boldsymbol{u-v}||^2)$
+  * ​
+
+#### Identifying new kernels
+
+__using identities__ : Let $K_1(\boldsymbol{u,v})$, $K_2(\boldsymbol{u,v})$ be kernels and $c>0$ an be constant, following is also kernel
+
+* $K(\boldsymbol{u,v}) = K_1(\boldsymbol{u,v}) + K_2(\boldsymbol{u,v})$
+* $K(\boldsymbol{u,v}) = c K_1(\boldsymbol{u,v})$
+* $K(\boldsymbol{u,v}) = f(\boldsymbol{u}) K_1(\boldsymbol{u,v}) f(\boldsymbol{v})$
+
+Or using __Mercer's theorem__
+
+* Construct nxn matrix of pairwise values $K(\boldsymbol{x_i,x_j})$
+* $K(\boldsymbol{x_i,x_j})$ is kernel if this matrix is positive-semidefinite (半正定). `question`
+
+### Modular Learning
+
+* choose learning method (model)
+* choose feature space mapping
+
+
+
+ 
+
+
 
 
 
