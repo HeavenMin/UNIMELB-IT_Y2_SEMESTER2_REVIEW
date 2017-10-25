@@ -211,7 +211,11 @@ __logistic funciton__: $f(s) = \dfrac {1}{1 + exp(-s)}$
 
 __model__: $P(y = 1|\boldsymbol{X}) = \dfrac {1}{1 + exp(-\boldsymbol{x'w})}$
 
-if $P(y=1|\boldsymbol{x} > \dfrac {1}{2})$ then class "1", else class "0"
+__Logistic regression is a linear classifier__
+
+__Classification rule__: if $P(y=1|\boldsymbol{x} > \dfrac {1}{2})$ then class "1", else class "0"
+
+__Decision boundary__: $ \dfrac {1}{1 + exp(-\boldsymbol{x'w})} = \dfrac {1}{2} \therefore \boldsymbol{x'w} = 0$
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8831913.png)
 
@@ -352,7 +356,7 @@ $\nabla L = \left[\dfrac {\partial L}{\partial \theta_1},…,\dfrac {\partial L}
 
 $\nabla$ is nabla symbol
 
-#### Gradient descent
+#### Gradient descent [wiki](https://baike.baidu.com/item/梯度下降/4864937?fr=aladdin)
 
 1. Choose $\boldsymbol{\theta^{(1)}}$ and some T
 2. For i from 1 to T*
@@ -362,6 +366,16 @@ $\nabla$ is nabla symbol
 > $\eta$ is dynamically updated in each step
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845064.png)
+
+#### Stochastic gradient descent
+
+* split all training data in B batches
+* choose init $\boldsymbol{\theta^{(1)}}$
+* For i from 1 to T (epochs is the iterations over the entire dataset)
+  * For j from 1 to B
+    * Do gradient descent update using data from batch j
+
+__Pros__: computational feasibility for large datasets 
 
 ### Bias-variance trade-off
 
@@ -385,17 +399,182 @@ complex model  $\rightarrow$ high variance, low
 
 ### Dot product
 
+$\boldsymbol{u\cdot v \equiv u'v} \equiv \sum^m_{i=1}u_iv_i \equiv ||\boldsymbol{u}||||\boldsymbol{v}||cos\theta$
 
+* if two vectors are orthogonal then $\boldsymbol{u'v}$ = 0
 
+### HyperPlane and normal vectors
 
+> a hyperplane defined by parameters $\boldsymbol{w}$ and $b$, is a set of points $\boldsymbol{x}$ that satisfy $\boldsymbol{x'w} +b=0$
 
+normal vector (法线) for a hyperplane is a vector perpendicular to that hyperplane
 
+Besides, vector $\boldsymbol{w}$ is a normal vector to the hyperplane
 
+### Preceptron model
 
+> also a linear binary classifier, but a building block for artificial neural network
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8899898.png)
 
+$w_0$ is bias weight and $f$ is activation function `question` : compare this model to logistic regression
 
+Predict class A if $s \geq 0$ and Predict class B if $s < 0$ where $s = \sum^m_{i=0}x_iw_i$
 
+#### loss function for perceptron
+
+* $L(s,y)=0$ if both $s,y$ have the same sign
+* $L(s,y) = |s|$ if both $s,y$ have different sign
+* $\therefore L(s,y) = \max (0,-sy)$
+
+#### Perceptron training algorithm
+
+* Choose initial guess $\boldsymbol{w}^{(0)}, k=0$
+* For i from 1 to T (epochs)
+  * For j from 1 to N (training data)
+    * data {$\boldsymbol{x_j},y_j$}
+    * Update*: $\boldsymbol{w}^{(k++)} = \boldsymbol{w}^{(k)} - \eta \nabla L(\boldsymbol{w}^{(k)})$
+
+Therefore, when classified correctly, weights are unchanged
+
+When misclassified: $\boldsymbol{w}^{(k+1)} = -\eta(\pm\boldsymbol{x})$
+
+| if $y=1$ but $s < 0$            | if $y=-1$ but $s \geq 0$        |
+| ------------------------------- | ------------------------------- |
+| $w_i \leftarrow w_i + \eta x_i$ | $w_i \leftarrow w_i - \eta x_i$ |
+| $w_0 \leftarrow w_0 + \eta$     | $w_0 \leftarrow w_0 - \eta$     |
+
+__Pros__: If the data is linearly separable, the perceptron training algorithm will converge to a correct solution.
+
+__Cons__: If the data is not linearly separable, the perceptron will fial completely rather than give some approximate solution.
+
+`note`: will have a Calculation problem.
+
+---
+
+## L7 - Multilayer Perceptron & Backpropagation
+
+### Multilayer Perceptron
+
+> modelling non-linearity via function composition
+
+Nodes in ANN can have various activation functions
+
+* Step function: $f(s) = \{^{1,  s \geq 0}_{0,  s < 0}$
+* Sign functions: $f(s) = \{^{1,  s \geq 0}_{-1,  s < 0}$
+* logistic function (Sigmoid): $f(s) = \dfrac {1}{1 + e^{-s}}$
+* ReLu: $f(s) = \max (0, x)$
+* Tanh:  $tanh(s) = 2sigmoid(2x) - 1 = \dfrac {e^x - e^{-x}}{e^x + e^{-x}}$
+
+### ANN
+
+ __Artifical neural network__(ANN) is a network of procesisng elements
+
+Output using a activation function of a weighted sum of inputs
+
+When using ANN, we need to
+
+- design network topology
+- adjust weights to given data
+
+#### Feed-forward ANN
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8903753.png)
+
+$g,h$ are activation functions.
+
+$r_j = v_{0j}+\sum^m_{i=1}x_iv_{ij} = \sum^m_{i=0}x_iv_{ij}$ if add bias node $x_0 =1$
+
+$u_j = g(r_j)$
+
+$s_k = w_{0k} + \sum^p_{j=1}u_jw_{jk} = \sum^p_{j=0}u_jw_{jk}$ if add bias node $u_0 = 1$
+
+$z_k = h(s_k)$
+
+ANN is supervised learning
+
+* can do univariate regression
+* multivariate regression
+* binary classification
+* multivariate classification
+
+__How to train__: Define the loss function and find parameters that minimise the loss on training data
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8906076.png)
+
+$r_j = \sum^m_{i=0}x_iv_{ij}$
+
+$z = s = \sum^p_{j=0}u_jw_j$
+
+How many parameters does this ANN have? (Include bias nodes $x_0$ and $u_0$)
+
+(m+1)p + (p+1) = __(m+2)p + 1__
+
+#### Loss function for ANN training
+
+Online training: use stochastic gradient descent with a batch size of one
+
+For regression: $L = \dfrac {1}{2}(\hat f(\boldsymbol{x,\theta}) -y)^2 = \dfrac {1}{2}(z-y)^2$  (the constant is for convenience)
+
+#### Stochastic gradient descent(batch size is 1) for ANN
+
+* Choose initial guess $\boldsymbol{\theta}^{(0)}$, $k=0$ (Here $\boldsymbol{\theta}$ is a set of all weights from all layers)
+* For i from i to T (epochs)
+  * For j from 1 to N (training examples)
+    * consider example {$\boldsymbol{x_j},y_j$}
+    * Update: $\boldsymbol{\theta}^{(i++)} = \boldsymbol{\theta}^{(i)} - \eta \nabla L(\boldsymbol{\theta}^{(i)})$
+
+$L = \dfrac {1}{2} (z_j - y_j)^2$  and need to compute partial derivatives $\dfrac {\partial L}{\partial v_{ij}}$ and $\dfrac {\partial L}{\partial w_{j}}$
+
+#### BackPropagation
+
+> Using chain rule
+
+$\dfrac {\partial L}{\partial w_{j}} = \dfrac {\partial L}{\partial z} \dfrac {\partial z}{\partial s} \dfrac {\partial s}{\partial w_j}$
+
+$\dfrac {\partial L}{\partial v_{ij}} = \dfrac {\partial L}{\partial z} \dfrac {\partial z}{\partial s}\dfrac {\partial s}{\partial u_{j}} \dfrac {\partial u_j}{\partial r_j}\dfrac {\partial r_j}{\partial v_{ij}}$
+
+define $\delta \equiv \dfrac {\partial L}{\partial s} = \dfrac {\partial L}{\partial z} \dfrac {\partial z}{\partial s}$ and $\epsilon_j = \dfrac {\partial L}{\partial r_j} = \dfrac {\partial L}{\partial z} \dfrac {\partial z}{\partial s}\dfrac {\partial s}{\partial u_{j}} \dfrac {\partial u_j}{\partial r_j}$
+
+$\because L = \dfrac {1}{2} (z - y)^2$ and $z = s$
+
+$\therefore \delta = (z-y)$ 
+
+$\because s = \sum^p_{j=0}u_jw_j$ and $u_j = h(r_j)$
+
+$\therefore \epsilon_j = \delta w_j h'(r_j)$
+
+$\dfrac {\partial s}{\partial w_j} = u_j$ and $\dfrac {\partial r_j}{\partial v_{ij}} = x_i$
+
+Therefore, $\dfrac {\partial L}{\partial w_{j}} = (z-y)u_j$ and $\dfrac {\partial L}{\partial v_{ij}} = (z-y)w_jh'(r_j)x_i$ `backpropagation`
+
+ANN is a flexible model, but the cons of it is over-parameterisation, hence tendency to __overfitting__
+
+Starting weights are usually small random values distributed around zero
+
+---
+
+## L8 - Deep Learning CNN & Autoencoders
+
+> Hidden layers viewed as feature space transformation
+
+A hidden layer can be thought of as the transformaed feature space. e.g. $\boldsymbol{u} = \varphi(\boldsymbol{x})$
+
+Parameters of such a transformation are learned from data
+
+### Depth vs Width
+
+a single infinitely wide layer used in theory gives a __universal approximator__
+
+However, depth tends to give more accurate models
+
+### CNN
+
+> based on repeated application of small filters to patches of a 2D image or range of a 1D input
+
+__Convolution__
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8909126.png)
 
 
 
