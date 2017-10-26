@@ -154,6 +154,10 @@ $\boldsymbol{\hat{w}= (X'X)^{-1}X'y}$     `normal equations`: this system is def
 ### Regularisation
 
 > Process of introducing additional information in order to solve an ill-posed problem or to prevent overfitting ---- (wiki)  (not just for linear methods)
+>
+> Method1:  Analytically — Ridge regression, Lasso
+>
+> Method2: Algorithmically
 
 * avoid ill-conditioning
   * irrelevant features
@@ -162,15 +166,19 @@ $\boldsymbol{\hat{w}= (X'X)^{-1}X'y}$     `normal equations`: this system is def
     * The normal equations solution: $\boldsymbol{\hat{w}= (X'X)^{-1}X'y}$. __With irrelevant features, $\boldsymbol{X'X}$ has no inverse__
   * lack of data
 * Introduce prior knowledge
-* Constrain modelling (vary the model complexity) — to deal with __underfitting__ and __overfitting__
+* Constrain modelling (control the model complexity) — to deal with __underfitting__ and __overfitting__
   * Explicit model selection
     * Try different classes of models
     * use held out validation to select the model (split training data into training set and validation set)
-  * Regularisation
+  * Regularisation (Analytically, by adding a data-independent term to the objective function)
     * Augment the problem: $\boldsymbol{\theta} = argmin_{\boldsymbol{\theta} \in \Theta}(L(data, \boldsymbol{\theta}) + \lambda R(\boldsymbol(\theta))$
-    * E.g. ridge regression (L2): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||^2_2$
-    * E.g. Lasso (L1): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||_1$
+    * E.g. __ridge regression__ (L2): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||^2_2$
+    * E.g. __Lasso__ (L1): $||\boldsymbol{y - Xw}||^2_2 + \lambda ||\boldsymbol{w}||_1$
     * Use held out validation/cross validation to choose $\lambda$
+  * Regularisation (Algorithmically)
+    * Early sopping in ANN
+    * Weights sharing in CNN
+    * Restricting tree depth in Random Forests
 
 #### L1 and L2 norms
 
@@ -235,7 +243,7 @@ $p(y|\boldsymbol{x} = Normal(y|\boldsymbol{x'w}, \sigma^2))$
 
 __Logistic regression__ assumes a Bernoulli distribution with parameter given by logistic transform of linear model:
 
-$p(y|\boldsymbol{x}) = Bernolli(y|\theta(\boldsymbol{x}) = \dfrac {1}{1 - exp(-\boldsymbol{x'w})}$
+$p(y|\boldsymbol{x}) = Bernolli \left(y|\theta(\boldsymbol{x}) = \dfrac {1}{1 - exp(-\boldsymbol{x'w})} \right)$
 
 Bernoulli distribution is defined as $p(y) = \theta^y(1-\theta)^{(1-y)}$ for $y \in \{0,1\}$
 
@@ -274,6 +282,8 @@ __no closed form solution__ — `stochastic gradient descent` is used
 ### Basis Expansion
 
 > Extending the utility of models via data transformation, can be applied for both regression and classification
+>
+> e.g. polynomial basis, RBF basis, also earlier layers of ANN can be viewed as transformation
 
 #### Transform the data
 
@@ -385,9 +395,9 @@ Training the model is to minimisation of training error, generalisation capacity
 
 Lemma: $test Error For x_0 = (bias)^2 + variance + irreducible Error$
 
-simple model $\rightarrow$ low variance, high bias
+simple model $\rightarrow$ underfitting, low variance, high bias
 
-complex model  $\rightarrow$ high variance, low 
+complex model  $\rightarrow$ overfitting, high variance, low 
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845714.png)
 
@@ -424,7 +434,7 @@ Predict class A if $s \geq 0$ and Predict class B if $s < 0$ where $s = \sum^m_{
 #### loss function for perceptron
 
 * $L(s,y)=0$ if both $s,y$ have the same sign
-* $L(s,y) = |s|$ if both $s,y$ have different sign
+* $L(s,y) = |s|​$ if both $s,y​$ have different sign
 * $\therefore L(s,y) = \max (0,-sy)$
 
 #### Perceptron training algorithm
@@ -776,11 +786,16 @@ Choosing a kernel implies some transformation $\varphi (\boldsymbol{x})$, the pr
 
 #### Kernels
 
+* Linear kernel
+  * $K(\boldsymbol{u,v}) = \boldsymbol{u'v}$
 * Polynomial kernel
   * $K(\boldsymbol{u,v}) = (\boldsymbol{u'v} + c)^d$
 * Radial basis function (rbf) kernel (also called Gaussian kernel)
   * $K(\boldsymbol{u,v}) = exp(-\gamma ||\boldsymbol{u-v}||^2)$
-  * ​
+
+#### Kernel as a similarity measure
+
+we can extend kernel methods to objects that are not vectors
 
 #### Identifying new kernels
 
@@ -800,15 +815,155 @@ Or using __Mercer's theorem__
 * choose learning method (model)
 * choose feature space mapping
 
+---
 
+## L12 - Ensemble methods & Interim Revision
 
- 
+ ### Combining models ([Ensemb	le methods](https://stats.stackexchange.com/questions/18891/bagging-boosting-and-stacking-in-machine-learning)) (集成学习)
 
+__model combination__ (ensemble learning) constructs a set of base models (learners) from a given set of training data and aggregates the ouputs into a single meta-model
 
+* Classification via (weighted) majority vote
+* Regression via (weighted) averaging
+* More generally: meta-model = f(base models)
 
+Because Test error = (bias)^2 + variance + irreducible error, Averaging k independent and identically distributed predictions reduces variance: $Var[\hat f_{avg}] = \dfrac {1}{k}Var[\hat f]$
 
+> All three are so-called "meta-algorithms": approaches to combine several machine learning techniques into one predictive model in order to decrease the variance (bagging), bias (boosting) or improving the predictive force (stacking alias ensemble)
 
+#### bagging (bootstrap aggregating)
 
+> construct "novel" datasets via sampling with replacement
+>
+> (stands for Bootstrap Aggregation) is the way decrease the variance of your prediction by generating additional data for training from your original dataset using combinations with repetitions to produce multisets of the same cardinality/size as your original data. By increasing the size of your training set you can't improve the model predictive force, but just decrease the variance, narrowly tuning the prediction to expected outcome.
+
+* Generate k datasets, each size n sampled from training data with replacement
+* Build base classifier on each constructed dataset
+* Combine predictions via voting/averaging
+
+Example:
+
+```
+Original training dataset: {0,1,2,3}
+Bootstrap samples:
+{1,2,2,3} out of sample 0
+{0,0,3,3} out of sample 1, 2
+```
+
+#### decision trees
+
+Model complexity is defined by the depth of the tree
+
+Deep trees: high variance, low bias
+
+shallow trees: low variance, high bias
+
+#### bagging example: Random forest
+
+> just bagged trees
+
+Algorithm
+
+* init forest as emoty
+* For $c = 1…k$
+  * Create new bootstrap sample of training data
+  * select random subset of l of the m features
+  * Train decision tree on bootstrap sample using the l features
+  * Add tree to forest
+* Making predictions via majority vote or averaging
+
+Reflections: simple method based on sampling and voting, possibility to parallelies computation of individual base classifiers, highly effective over noisy datasets, performance is better, can improves unstable calssifiers by reducing variance
+
+### Boosting
+
+> focus attention of base classifiers on examples "hard to classify"
+>
+> is a two-step approach, where one first uses subsets of the original data to produce a series of averagely performing models and then "boosts" their performance by combining them together using a particular cost function (=majority vote). Unlike bagging, in the classical boosting the subset creation is not random and depends upon the performance of the previous models: every new subsets contains the elements that were (likely to be) misclassified by previous models.
+
+Method: iteratively change the distribution on examples to reflect performance of classifier on the previous iteration
+
+Example:
+
+```
+original training dataset: {0,1,2,3,4,5,6,7,8,9}
+Boosting samples:
+iteration 1: {7,2,6,7,5,4,8,8,1,0} 	1 2
+assume example 2 was misclassified
+iteration 2: {1,3,8,2,3,5,2,0,1,9}	2 2s
+assume example 2 was still misclassified
+iteration 3: {2,9,2,2,7,9,3,2,1,0}	4 2s
+```
+
+#### AdaBoost
+
+* Init example distribution $P_1(i) = 1/n, i = 1,…,n$
+* For $c = 1…k$
+  * Train base classifier $A_c$ on sample with replacement from $P_c$
+  * set confidence $\alpha_c = \dfrac {1}{2} ln \dfrac {1 - \epsilon _c}{\epsilon _c}$ for classifier's error rate $\epsilon _c$
+  * Update example distribution to be normalised of:
+    * $P_{c+1}(i) \propto P_c(i) \times \{ ^{exp(-\alpha _c), A_c(i) = y_i} _{exp(\alpha _c), otherwise}$
+* Classify as majority vote weighted by confidences $argmax_y \sum^k_{c=1} \alpha _t \delta (A_c(\boldsymbol{x}) = y)$
+
+Reflections: boosting based on iterative sampling and weighted voting, more computationally expensive than bagging. In practical applications, boosting can overfit
+
+| Bagging                      | Boosting                     |
+| ---------------------------- | ---------------------------- |
+| Parallel sampling            | Iterative sampling           |
+| Minimise variance            | Target "hard" instances      |
+| Simple voting                | Weighted voting              |
+| Classification or regression | Classification or regression |
+| Not prone to overfitting     | Prone to overfitting         |
+
+### Stacking
+
+> "smooth" errors over a range of algorithms with different biases
+>
+>  is a similar to boosting: you also apply several models to your original data. The difference here is, however, that you don't have just an empirical formula for your weight function, rather you introduce a meta-level and use another model/approach to estimate the input together with outputs of every model to estimate the weights or, in other words, to determine what models perform well and what badly given these input data.
+
+Method: train a meta-model over the outputs of the base learners
+
+* train base- and meta-learners using cross-validation
+* Simple meta-classifier: logistic regression
+
+`question` : difference between bagging and boosting
+
+Reflections: Mathematically simple but computationally expansive method.
+
+### Supervised Learning Interim Summary
+
+[Supervised Learning](#frequentist supervised learning)
+
+#### supervised learning methods
+
+* [Linear Regression](#Linear Regression)
+  * Model: $y =  \boldsymbol{x'w} + \epsilon$, where $\epsilon \sim \mathbb{N} (0,\sigma ^2)$
+  * Loss function: [Squared loss](#Method of least squares)
+  * Optimisation: [Analytic solution](#Solving optimisation problems)
+  * can also be optimised iteratively
+* [Logistic Regression](#Logistic regression model)
+  * Model: $P(y|\boldsymbol{x}) = Bernoulli \left(y|\theta(\boldsymbol{x}) = \dfrac {1}{1 + exp(-\boldsymbol{x'w})} \right)$
+  * Loss function: [Cross-entropy](#Cross entropy) (aka log loss)
+  * Optimisation: [stochastic gradient descent](#optimisation for logistic regression)
+* [Perceptron](#Preceptron model)
+  * Model: label is baed on sign of $s = \sum^m_{i=0}x_iw_i$ or $w_0 + \boldsymbol{w'x}$
+  * Loss function: [Perceptron loss](#loss function for perceptron)
+  * Optimisation: [Stochastic gradient descent](#Perceptron training algorithm)
+* [ANN](#ANN)
+  * Model: defined by network topology
+  * Loss function: varies ,can use cross-entropy , [loss function](#Loss function for ANN training)
+  * [Optimisation](#Stochastic gradient descent(batch size is 1) for ANN): Variations of gradient descent, Ada
+  * Notes: [backpropagation](#BackPropagation) used to compute partial derivatives.
+  * [CNN](#CNN)
+* [SVM](#L9 - Support Vector Machine (SVM) hard margin)
+  * Model: label is based on sign of $s = b + \sum^m_{i=1}x_iw_i = b + \boldsymbol{w'x}$
+  * Loss funtion: [hard margin SMV loss](#SVM Objective as Regularised Loss); [hinge loss](#hinge loss: soft margin SVM loss)
+  * Optimisation: [Quadratic Programming](#SVM training preliminaries)
+  * Notes: Specialised optimisation algorithms `question`
+* [Random Forest](#bagging example: Random forest)
+  * Model: average of decision trees
+  * Loss function: Cross-entropy; or squared loss
+  * Optimisation: Greed growth of each tree
+  * Notes: an example of model averaging
 
 
 
