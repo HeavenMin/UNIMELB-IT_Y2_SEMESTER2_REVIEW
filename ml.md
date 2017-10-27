@@ -72,6 +72,9 @@ $P(parameters|data) = \dfrac {P(data|parameters)P(parameters)}{P(data)}$
 ---
 ## L2 - Statistical schools
 ### MLE- Maximun-likelihood Estimation
+
+> MLE is a frequentist principle that suggests that given a dataset, the "best" parameters to use are the ones that maximise the probability of the data
+
 $\widehat {\theta }\left( x_{1},\ldots ,x_{n}\right) =argmax_{\theta \in \Theta }\prod ^{n}_{i=1}p_{\theta }\left( x_{i}\right)$  
 __$\hat{\theta} = argmax_\theta P(X=x|\theta)$__ `MLE`
 ### [MAP](http://www.cnblogs.com/sylvanas2012/p/5058065.html)
@@ -964,6 +967,336 @@ Reflections: Mathematically simple but computationally expansive method.
   * Loss function: Cross-entropy; or squared loss
   * Optimisation: Greed growth of each tree
   * Notes: an example of model averaging
+
+
+---
+
+## L13 - Clustering & Gaussian Mixture model (GMM)
+
+### Unsupervised Learning
+
+> concerns with learning the structure of the data in the absence of labels
+
+* Clustering
+* Dimensionality reduction
+* Learning parameters of probabilistic models
+
+### Clustering
+
+> automatic grouping of objects such that the objects within each group (cluster) are more similar to each other than objects from different groups
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8993441.png)
+
+#### Measuring dissimilarity
+
+__Euclidean distance__ : 
+
+$d_{ij} = ||\boldsymbol{x_i - x_j}|| = \sqrt {\sum^m_{l=1} \left( \boldsymbol{(x_i)_l - (x_j)_l} \right)^2}$
+
+#### K-means clustering
+
+* Init: choose k cluster centroids randomly
+* Update
+  * Assign points to the nearest centroid
+  * compute centroids under the current assignment
+* Termination: if no change then stop
+* Goto Step 2: Update
+
+#### Determine number of clusters
+
+* Cross-validation-like strategies for determining k
+* Try several possible k and look at the trend
+* Information-theoretic results
+
+#### Kink method and gap statistics
+
+`question`
+
+Manual inspection of minimised within cluster variation as function of k
+
+### Guassian Mixture model (GMM)
+
+> a probabilistic view of clustering
+>
+> GMM clustering is a generalisation of k-means
+>
+> example application of expectation Maximisation (EM) algorithm
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8994751.png)
+
+#### Normal (Gaussian) distribution
+
+For 1D Gaussian: $\mathbb{N}(x|\mu, \sigma) \equiv \dfrac {1}{\sqrt {2\pi\sigma ^2}}exp \left( - \dfrac {(x-\mu)^2}{2 \sigma ^2} \right)$
+
+For m-D Gaussian: $\mathbb{N}(\boldsymbol{x|\mu, \Sigma}) \equiv (2\pi)^{-\dfrac {m}{2}} (det\boldsymbol{\Sigma})^{- \dfrac {1}{2}} exp \left(- \dfrac {1}{2} (\boldsymbol{(x - \mu)' \Sigma^{-1}(x - \mu)}) \right)$
+
+$\boldsymbol{\Sigma}$ is a symmetric $m \times m$ matrix that is assumed to be positive definite
+
+$det\boldsymbol{\Sigma}$ denotes matrix determinant
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8995908.png)
+
+#### GMM
+
+__Gaussian mixture distribution__ (for one data point):
+
+$p(\boldsymbol{x}) \equiv \sum^k_{c=1} w_c \mathbb{N}(\boldsymbol{x| \mu_c, \Sigma_c})$
+
+Here $w_c \geq 0$ and $\sum^k_{c=1}w_c = 1$ 
+
+$w_c$ is a probability distribution over components, all $w_c$ add up to 1
+
+Parameters of model are $w_c, \boldsymbol{\mu_c, \Sigma_c}, c = 1,…k$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8996673.png)
+
+`question`
+
+```
+example for parameter: 
+Consider a GMM with 5 components for 3D data. How many independent parameters does this model have?
+```
+
+For 3D data and 5 components: $w = 4, \boldsymbol{\mu} = 3, \boldsymbol{\Sigma} = 6$  Therefore, the answer is $6 \times 5 + 3 \times 5 + 4$
+
+__MLE__ is used for Clustering GMM as an optimisation problem
+
+#### Fitting a GMM model to data (optimisation)
+
+Assuming that data points are independent, our aim is to find $w_c, \boldsymbol{\mu_c, \Sigma_c}, c = 1,…k$ that maximise
+
+$p(\boldsymbol{x_1,…,x_n}) = \prod^n_{i=1} \sum^k_{c=1} w_c \mathbb{N}(\boldsymbol{x_i| \mu_c, \Sigma_c})$
+
+After using log trick
+
+$\log p(\boldsymbol{x_1,…,x_n}) = \sum^n_{i=1} \log \left( \sum^k_{c=1} w_c \mathbb{N}(\boldsymbol{x_i| \mu_c, \Sigma_c} \right)$
+
+The log cannot be pushed inside the sum, so taking the derivative of this expression is challenging, need use [__EM__](#Estimating Parameters of GMM) to solve this optimisation. 
+
+#### Using Expectation Maximisation (EM)
+
+> is a common way to find parameters of GMM
+
+__EM__ is an algorithm to solve the problem posed by MLE
+
+---
+
+## L14 - Expectation Maximisation Algorithm (EM)
+
+[EM](http://blog.csdn.net/zouxy09/article/details/8537620) 期望最大算法
+
+> key idea for EM is to introduce latent variables
+>
+> In GMM, if we let $z_i$ denote true cluster membership for each point $\boldsymbol{x_i}$. computing the likelihood with known values $\boldsymbol{z}$ is simplified
+
+### Jensen's Inequality
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9008967.png)
+
+Compares effect of averaging before and after applying a convex function:$f(Average(\boldsymbol{x})) \leq Average(f(\boldsymbol{x}))$
+
+Therefore, If $\boldsymbol{X}$ random variable, f is a convex function: $f(\mathbb{E}[\boldsymbol{X}]) \leq \mathbb{E}[f(\boldsymbol{X})]$
+
+Because we want to maximise $\log p(\boldsymbol{X|\theta})$ . We don't know $\boldsymbol{Z}$ , but consider an arbitary non-zero distribution $p(\boldsymbol{Z})$ 
+$$
+\log p(\boldsymbol{X|\theta}) = log \sum_z p(\boldsymbol{X,Z|\theta}) \\
+= \log \sum_z \left( p(\boldsymbol{X,Z|\theta}) \dfrac {p(\boldsymbol{Z})}{p(\boldsymbol{Z})} \right) \\
+= \log \sum_z \left( p(\boldsymbol{Z}) \dfrac {p(\boldsymbol{X,Z|\theta})}{p(\boldsymbol{Z})} \right) \\
+= \log \mathbb{E}_{\boldsymbol{Z}} \left[ \dfrac {p(\boldsymbol{X,Z|\theta})}{p(\boldsymbol{Z})} \right] \\
+\geq \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{X,Z|\theta})}{p(\boldsymbol{Z})} \right] \\
+= \mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{X,Z|\theta})] - \mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{Z})]
+$$
+Then maximising the lower bound:
+
+$\log p(\boldsymbol{X|\theta}) \geq \mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{X,Z|\theta})] - \mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{Z})]$    `EM`
+
+$\mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{X,Z|\theta})] - \mathbb{E}_{\boldsymbol{Z}}[\log p(\boldsymbol{Z})] \equiv G(\boldsymbol{\theta},p(\boldsymbol{Z}))$    `lower bound`
+
+The right hand side (RHS) is a lower bound on the original log likelihood. We want to maximise the RHS as a function of "variables" $\boldsymbol{\theta}$ and $p(\boldsymbol{Z})$ .
+
+It is hard to optimise with respect to both at the same time, so __EM__ resorts to an iterative procedure
+
+__EM__ using coordinate descent:
+
+* Fix $\boldsymbol{\theta}$ and optimise the lower bound for $p(\boldsymbol{Z})$ 
+* Fix $p(\boldsymbol{Z})$ and optimise for $\boldsymbol{\theta}$
+
+For any point $\boldsymbol{\theta}^*$, it can be shown that setting $p(\boldsymbol{Z}) = p(\boldsymbol{Z|X, \theta^*})$ makes the lower bound tight
+
+For any $p(\boldsymbol{Z})$ , the second term does not depend on $\boldsymbol{\theta}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9010554.png)
+
+#### EM as iterative optimisation
+
+* Init: choose initial values of $\boldsymbol{\theta}^{(1)}$
+* Update:
+  * __E-step__: compute $Q(\boldsymbol{\theta}, \boldsymbol{\theta}^{(t)}) \equiv \mathbb{E}_{\boldsymbol{Z|X, \theta^{(t)}}}[\log p(\boldsymbol{X,Z|\theta})]$    根据参数初始值或上一次迭代的模型参数来计算出隐性变量的后验概率，其实就是隐性变量的期望。作为隐藏变量的现估计值
+  * __M-step__: $ \boldsymbol{\theta}^{(t+1)} = argmax_\theta Q(\boldsymbol{\theta}, \boldsymbol{\theta}^{(t)})$.  将似然函数最大化以获得新的参数值
+* Termination: if no change then stop
+* Go to step 2
+
+> The resulting estimate can be only a local maximum
+
+#### Setting a tight lower bound
+
+$$
+\log p(\boldsymbol{X|\theta}) \geq \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{X,Z|\theta})}{p(\boldsymbol{Z})} \right] \\
+=  \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{Z|X,\theta})p(\boldsymbol{X|\theta})}{p(\boldsymbol{Z})} \right] \\
+= \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{Z|X,\theta})}{p(\boldsymbol{Z})} \right] + \log p(\boldsymbol{X|\theta}) \\
+\therefore \log p(\boldsymbol{X|\theta}) \geq \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{Z|X,\theta})}{p(\boldsymbol{Z})} \right] + \log p(\boldsymbol{X|\theta}) \\
+\because \mathbb{E}_{\boldsymbol{Z}} \left[ \log  \dfrac {p(\boldsymbol{Z|X,\theta})}{p(\boldsymbol{Z})} \right] \leq 0
+$$
+
+And if $p(\boldsymbol{Z}) = p(\boldsymbol{Z|X,\theta})$ , then first term of RHS = 0
+
+For any $\boldsymbol{\theta}^*$ , setting $p(\boldsymbol{Z}) = p(\boldsymbol{Z|X,\theta^*})$ maximises the lower bound on $\log p(\boldsymbol{X|\theta^*})$ and makes it tight
+
+### Estimating Parameters of GMM
+
+> using EM algorithm
+
+* Let $z_1, …,z_n$ denote true origins of the corresponding points $\boldsymbol{x_1,…,x_n}$ . Each $z_i$ is a discrete variable that takes values in $1,..,k$ where k is a number of clusters
+* Them ,if we knew $\boldsymbol{z}$ , the complete data log likelihood is 
+  * $\log p(\boldsymbol{x_1,…,x_n, z}) = \sum^n_{i=1} \log \left( \sum^k_{c=1} w_{zi} \mathbb{N}(\boldsymbol{x_i| \mu_{zi}, \Sigma_{zi}} \right)$
+
+EM algorithm handles this uncertainty replacing $\log p(\boldsymbol{X|\theta})$ with expectation $\mathbb{E}_{\boldsymbol{Z|X, \theta^{(t)}}}[\log p(\boldsymbol{X,Z|\theta})]$ . This in turn requires the distribution of $p(\boldsymbol{Z|X, \theta^{(t)}})$ given current parameter estimates
+
+Assuming that $z_i$ are pairwise independent, we nee to define $P(z_i = c| \boldsymbol{x_i,\theta ^{(t)}})$
+
+We can use  $P(z_i = c| \boldsymbol{x_i,\theta ^{(t)}}) = \dfrac {w_c \mathbb{N}(\boldsymbol{x_i| \mu_c, \Sigma_c})}{\sum^k_{l=1} w_l \mathbb{N}(\boldsymbol{x_i| \mu_l, \Sigma_l})}$ `reponsibility`
+
+This probability is called __responsibility__ that cluster c takes for data point i
+
+$r_{ic} \equiv P(z_i = c| \boldsymbol{x_i,\theta ^{(t)}})$
+
+#### Expectation step for GMM 
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9014018.png)
+
+#### Maximisation step for GMM
+
+> In the maximisation step, take partial derivatives $Q(\boldsymbol{\theta}, \boldsymbol{\theta}^{(t)})$, with respect to each of the parameters and set the derivatives to zero to obtain new parameter estimates
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9014192.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9014238.png)
+
+Also, __k-means__ algorithm is a EM algorithm for the restricted GMM model.
+
+---
+
+## L15 - Dimensionality Reduction
+
+### Dimensionality reduction
+
+> DR refers to representing the data using a smaller number of variables (dimensions) while preserving the "interesting" structure of the data
+
+Several purpose
+
+* visualisation (e.g. mao on 2D or 3D)
+* Computational efficiency
+* Data compression
+
+Although DR in general results in loss of some information, it need to ensure that most of the "interesting" information (signal) is preserved.
+
+### Principal Component Analysis (PCA)
+
+> Finding a rotation of data that minimises covariance between variables
+
+在降维的同时保持数据之间最大差异性
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9015062.png)
+
+The "new coordinate system" is a set of vectors $\boldsymbol{p_1,…,p_m}$, where each $||\boldsymbol{p_i}|| = 1$
+
+Therefore, the corresponding $i^{th}$ coordinate for all point after the transformation is $\boldsymbol{X'p_i}$
+
+The variance along this axis is $\dfrac {1}{n-1}(\boldsymbol{X'p_i})'(\boldsymbol{X'p_i}) = \dfrac {1}{n-1}(\boldsymbol{p_i'X} \boldsymbol{X'p_i}) = \boldsymbol{p_i' \Sigma_x p_i}$
+
+here $\boldsymbol{\Sigma_x}$ is the covariance matrix (协方差矩阵) of the original data $\boldsymbol{\Sigma_x} \equiv \dfrac {1}{n-1} \boldsymbol{XX'}$ 
+
+__PCA__ aims to find $\boldsymbol{p_i}$ that maximises $\boldsymbol{p_i' \Sigma_x p_i}$
+
+#### solving the optimisation
+
+Using Lagrange to transform the original problem into an unconstrained optimisation problem. Introduce a Lagrange multiplier $\lambda_1$ , and set derivatives of the Lagrangian to zero
+$$
+L = \boldsymbol{p_1' \Sigma_X p_1} - \lambda_1 (\boldsymbol{p_1'p_1} - 1) \\
+\dfrac {\partial L}{\partial \boldsymbol{p_1}} = 2 \boldsymbol{\Sigma_x p_1} -2 \lambda_1\boldsymbol{p_1} = 0 \\
+\boldsymbol{\Sigma_Xp_1} = \lambda_1 \boldsymbol{p_1}
+$$
+eigenvector 特征向量， 得到的新矢量仍然与原来的 保持在同一条直线上，但其长度或方向也许会改变 
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9017292.png)
+
+> Given a square matrix A , a column vector e is called an eigenvector if Ae = $\lambda e$ . Here $\lambda$ is the corresponding eigenvalue 
+
+`question`
+
+Therefore, in order to maximise variance along the first principal axis, the axis should be chosen such that $\boldsymbol{\Sigma_Xp_1} = \lambda_1 \boldsymbol{p_1}$
+
+$\boldsymbol{p_1}$ has to be an __eigenvector__ of centered data covariance matrix $\boldsymbol{\Sigma_X}$
+
+Becasue $\lambda_1 = \boldsymbol{p_1' \Sigma_x p_1}$  , thus we need to choose $\boldsymbol{p_1}$ that corresponds to the largest eigenvalue of centered data covariance matrix $\boldsymbol{\Sigma_X}$
+
+Also, $||\boldsymbol{p_i}|| = 1$ is a important constraint
+
+> Lemma: a real symmetric m x m matrix has m real eigenvalues and the corresponding eigenvectors are orthogonal
+
+Step:
+
+* sort eigenvalues from largest to smallest
+* Set $\boldsymbol{p_1,…,p_m}$ as corresponding eigenvectors
+* Project data $\boldsymbol{X}$ onto these new axes to get coordinates of the transformed data
+* Keep only the first s coordinates to reduce dimensionality
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9073809.png)
+
+### Multidimensional Scaling
+
+MDS
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9073941.png)
+
+Two "parameters" of MDS approach
+
+* how to measure dissimilarity
+* how to measure preservation of dissimilarity
+
+One way is using Euclidean distance  $d(\boldsymbol{z_i,z_j}) = ||\boldsymbol{z_i-z_j}||$
+
+The preservation can be measured suing a function such as
+
+$S(\boldsymbol{z_1,…,z_n}) = \dfrac {\sum_{i,j}(d(\boldsymbol{x_i,x_j}) - d(\boldsymbol{z_i,z_j}))^2}{\sum_{i,j} d(\boldsymbol{z_i,z_j})^2}$   `stress function`
+
+The aim of such MDS is to find $\boldsymbol{z_1,…,z_n}$ that minimise $S_M(\boldsymbol{z_1,…z_n})$, can using gradient descent to deal with it 
+
+```
+Suppose that there are several vlusters in high dimensional data, points within clusters are close to each other, points from different clusters are far away. MDS attemps to preserve this distance structure, so that clusters are preserved in low dimensional map.
+```
+
+### Data representation
+
+Switching between data representations
+
+* Coordinates for each point (High dimensional coordinates — to DO dimensionality reduction using MDS)
+  * Compute distances
+* Matrix of pairwise distances
+  * Do MDS
+* (Reconstructed) coordinates for each point (or Approximate low dimensional coordinates)
+
+Example:
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9075270.png)
+
+---
+
+
+
+
+
+
 
 
 
