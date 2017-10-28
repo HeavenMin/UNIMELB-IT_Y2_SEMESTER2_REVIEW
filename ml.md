@@ -1292,29 +1292,395 @@ Example:
 
 ---
 
+## L16 - Manifold Learning
 
+流形可以简单的理解为空间 [Manifold](http://blog.csdn.net/xuexiyanjiusheng/article/details/46928771)
 
+> 所谓 Machine Learning 里的 Learning ，就是在建立一个模型之后，通过给定数据来求解模型参数。而 Manifold Learning 就是在模型里包含了对数据的流形假设
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9075839.png)
 
+> Isomap 将这个数据集从 4096 维映射到 3 维空间中，并显示了其中 2 维的结果
 
+__K-means__ can find spherical clusters and __GMM__ can find elliptical clusters. But they will struggle in the case of handel the manifold problem.
 
+### Geodesic Distances and Isomap
 
+> A non-linear dimensionality reduction algorithm that preserves locality information using geodesic distances 
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9077814.png)
 
+We are more interested in preserving distances along the manifold (geodesic distances)
 
+### Geodesic distances
 
+Geodesic distances can be approximated using a graph in which vertices represent data points
 
+__Similarity graph__
 
+* define some local radius $\epsilon$ . Connect vertices $i$ and $j$ with an edge if $d(i,j) \leq \epsilon$
+* define nearest neighbor threshold $k$. Connect vertices $i$ and $j$. if $i$ is among the k nearest neighbors of $j$ or $j$ is among the $k$ nearest neighbors of $i$ , set weight for each edge to $d(i,j)$
 
+Given the similarity graph, compute shortest paths between each pair of points
 
+Set geodesic distance between vertices $i$ and $j$ to the length (sum of weights) of the shorest path between them.
 
+Define a new similarity matrix based on geodesic distances
 
+### Isomap
 
+* Construct the similarity graph
+* Compute shortest paths
+* Geodesic distances are the lengths of the shortest paths
+* Construct similarity matrix using geodesic distanes
+* Apply MDS
 
+### Spectral Clustering
 
+> An spectral graph theory approach to non-linear dimensionality reduction
 
+In contrast to Isomap, spectral clustering uses a different non-linear mapping technique called Laplacian eigenmap
 
+* Construct __similarity graph__ , use the corresponding adjacency matrix as a new similarity matrix
+  * Unlike Isomap, the adjacency matrix is used "as is", shortest paths are not used
+* Map data to a lower dimensional space using __Laplacian eigenmaps__ on the adjacency matrix
+* Apply __k-means__ clustering to the mapped points
 
+#### Graph Laplacian
+
+`TODO`
+
+#### Laplacian eigenmaps `Todo` 
+
+> is a non-linear dimensionality reduction method
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9079989.png)
+
+`Todo`
+
+---
+
+## L17 - Bayesian inference & Bayesian regression `question` 
+
+### Uncertainty
+
+> From small training sets, we rarely have complete confidence in any models learned.
+
+Single prediction is of limited use due to uncertainty
+
+* single number uninformative - may be wildly off
+* might want to formulate decision from prediction
+
+### The Bayesian View
+
+> Retain and model all unknows (e.g., uncertainty over parameters) and use this information when making inferences.
+
+### Frequentist vs Bayesian divide
+
+__Frequentist__
+
+learning using point estimates, regularisation, p-values ...
+
+__Bayesian__
+
+maintain uncertainty, marginalise (sum) out unknowns during inference
+
+### Bayesian Regression
+
+> Application of Bayesian inference to linear regression, using Normal prior over w
+
+Recall probabilistic formulation of linear regression
+
+$y \sim Normal(\boldsymbol{x'w,} \sigma^2)$ 
+
+Motivated by Bayes rule
+
+$ \boldsymbol{w} \sim Normal (\boldsymbol(0, \gamma^2 \boldsymbol{I}_D))$ 
+
+$p(\boldsymbol{w|X,y}) = \dfrac {p(\boldsymbol{y|X,w})p(\boldsymbol{w})}{p(\boldsymbol{y|X})}$
+
+$max_\boldsymbol{w} p(\boldsymbol{w|X,y}) = max_{\boldsymbol{w}} p(\boldsymbol{y|X,w})p(\boldsymbol{w})$
+
+Rewind one step, consider full posterior
+
+$p(\boldsymbol{w|X,y}, \sigma^2) = \dfrac {p(\boldsymbol{y|X,w}, \sigma^2)p(\boldsymbol{w})}{p(\boldsymbol{y|X})}$
+
+$ = \dfrac {p(\boldsymbol{y|X,w}, \sigma^2)p(\boldsymbol{w})}{\int p(\boldsymbol{y|X,w}, \sigma^2)p(\boldsymbol{w})d\boldsymbol{w}}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9098674.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9098724.png)
+
+#### Bayesian Linear Regression example
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9098802.png)
+
+__Sequential Bayesian Updating__
+
+can repeat from step 2 when we see more and more data
+
+* Start from prior
+* See new labelled datapoint
+* Compute posterior $p(\boldsymbol{w|X, y}, \sigma^2)$
+* The posterior now takes rols of prior
+  * repeat from step 2
+
+> Uncertainty not captured by MEL and MAP
+
+---
+
+## L18 - Bayesian classification & Model selection
+
+`question` `TODO` 
+
+### Stages of Training
+
+1. Decide on model formulation & prior
+2. Compute posterior over parameters, $p(\boldsymbol{w|X,y})$
+
+| MAP                               | approx.Bayes                             | exact Bayes                              |
+| --------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| 3. Find mode for w                | 3. Sample many w                         | 3. Use all w to make expected predicton on test |
+| 4. Use to make prediction on test | 4. Use to make ensemble average prediction on test |                                          |
+
+### Bayesian Classification
+
+#### Beta-Binomial (二项式分布)
+
+Binomial dist : $p(k|n,q) = (^n_k)q^k(1-q)^{n-k}$
+
+ And its conjugate prior, Beta dist : $p(q) = Beta(q;\alpha, \beta) = \dfrac {\gamma (\alpha + \beta)}{\gamma(\alpha)\gamma(\beta)} q^{\alpha -1}(1 - q)^{\beta -1}$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9100590.png)
+
+#### Suite of useful conjugate priors
+
+| likelihood  | conjugate prior                          |
+| ----------- | ---------------------------------------- |
+| Normal      | Normal (for mean)                        |
+| Normal      | Inverse Gamma (for variance) or Inverse Wishart(convariance) |
+| Binomial    | Beta                                     |
+| Multinomial | Dirichlet                                |
+| Poisson     | Gamma                                    |
+
+### Bayesian Model Selection
+
+* Choosing the best model
+  * linear, polynomial order, RBF basis/kernel
+  * setting model hyperparameters
+  * optimiser settings
+  * type of model
+
+Model selection using Bayes rule, to select between competing model classes
+
+$ p(M_i|D) = \dfrac {p(D|M_i)p(M_i)}{p(D)}$
+
+with $M_i$ as model i and D the dataset
+
+The evidence : $p(D|M) = p(\boldsymbol{y|X}, M)$
+
+---
+
+## L20 - PGM Representation
+
+### Probabilistic Graphical Models
+
+> PGM aka "Bayes Nets" 贝叶斯网络
+
+### Joint Distribution
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9101978.png)
+
+M boolean r.v.'s  require $2^M -1 $ rows
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9102323.png)
+
+Cons:Tables are too large
+
+Therefore, assume independence
+
+### Factoring Joint Distributions
+
+Chain Rule: For any oedering of r.v's can always factor:
+
+$Pr(X_1,X_2,…,X_k) = \prod^k_{i=1}Pr(X_i|X_{i+1},…,X_k)$
+
+Model's independence assumptions correspond to
+
+* Dropping conditioning r.v.'s in the factors
+* Example unconditional independence : $Pr(X_1|X_2) = Pr(X_1)$
+* Example conditional independence : $ Pr(X_1|X_2,X_3) = Pr(X_1|X_2)$
+* Example independent r.v.'s $Pr(X_1,…,X_k) = \prod^k_{i=1}Pr(X_i)$
+
+### Directed PGM
+
+Conditional dependence:
+
+* Node table: $Pr(child|parents)$
+
+* Child directly depends on parents
+
+* Joint factorisation
+
+  * $Pr(X_1,X_2,…,X_k) = \prod^k_{i=1}Pr(X_i|X_j \in parents(Xi))$
+
+   ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9103784.png)
+
+Example:
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9103926.png)
+
+### Naive Bayes
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9104227.png)
+
+#### short hand for repeats: Plate notation
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9104281.png)
+
+---
+
+## L21 - Independence in PGMs
+
+### Independence relations (D-separation)
+
+* Marginal independence $P(X,Y) = P(X)P(Y)$
+* Conditional independence $P(X,Y|Z) = P(X|Z)P(Y|Z)$
+
+Notation $A\bot B|C$:
+
+* RVs in set A are independent of RVs in set B, when given the values of RVs in C
+* Symmetric: can swap roles of A and B
+* $A \bot B$ denotes marginal independence, $C = \emptyset$
+
+#### Marginal independence in Graph
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9152765.png)
+
+$X \bot Y \leftarrow P(X,Y) = P(X)P(Y)$
+
+When $X \bot Z$ where Z connected to Y
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9152797.png)
+
+For the example:
+
+Head-to-head ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9152975.png)
+
+Marginal independence denoted $X \bot Y$
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9153061.png)
+
+### Conditional independence
+
+ Tail-to-tail![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9153767.png)
+$$
+\because P(AB) = P(A|B)P(B) \therefore P(A|B) = \dfrac {P(AB)}{P(B)} \\
+P(X,Y|Z) = \dfrac {P(X,Y,Z)}{P(Z)} = \dfrac {P(Z)P(X|Z)P(Y|Z)}{P(Z)} = P(X|Z)P(Y|Z) \\
+\therefore X \bot Y|Z
+$$
+Head-to-tail ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9154009.png)
+$$
+P(X,Y|Z) = \dfrac {P(X)P(Z|X)P(Y|Z)}{P(Z)} = \dfrac {P(Z)P(X|Z)P(Y|Z)}{P(Z)} = P(X|Z)P(Y|Z)
+$$
+
+> Marginal dependence ≠ conditional independence
+
+#### How to apply to larger graphs?
+
+* based on paths separating nodes, do they contain nodes with head-to-head, head-to-tail,or tail-to tail links?
+* can all [undirected!] paths connecting two nodes be blocked by an independence relation?
+
+### Markov Blanket
+
+Solve using d-separation rules from graph
+
+### Undirected PGMs
+
+> key difference between undirected and directed is the normalisation
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9161790.png)
+
+Based onn notion of
+
+* Clique: a set of fully connected nodes (e.g., A-D,C-D, C-D-F)
+* Maximal clique: largest cliques in graph (not C-D, due to C-D-F)
+
+Joint probability defined as 
+
+$P(a,b,c,d,e,f) = \dfrac {1}{Z} \psi_1(a,b) \psi_2(b,c)\psi_3(a,d)\psi_4(d,c,f)\psi_5(d,e)$
+
+For example: $ B \bot D | \{A,C\} $
+
+where $\psi$ is a positive function and Z is the normalising 'partition' function
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9162225.png)
+
+---
+
+## L22 - PGM Probabilistic Inference
+
+### Probabilistic inference on PGMs
+
+> Computing other distributions from joint
+>
+> Joint + Bayes rule + marginalisation -> anything
+
+Example
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9163416.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9163929.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9164333.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9164676.png)
+
+---
+
+## L23 - PGM Statistical inference
+
+> learn parameters from (missing) data
+
+### Fully-observed case is "easy"
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9166625.png)
+
+When preence of unobserved variables trickier
+
+* Maximise likelihood of oberved data only
+* Marginalise full joint to get to desired "partial" joint
+* $ argmax_{\theta \in \Theta} \prod^n_{i=1} \sum_{latentj} \prod_j p(X^j = x_i^j|X^{parents(j)} = x_i^{parents(j)})$
+* This won't decouple
+* Partially-observed case:
+  * Init seed, then do until "convergence", fill missing as expectation. And MLE on fully-observed
+
+### Expectation-Maximisation Algorithm
+
+* Seed parameters randomly
+* E-step: Complete unobserved data as posterior distributions (prob inference)
+* M-step: Update parameters with MLE on the fully-observed data
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9166452.png)
+
+---
+
+## L24 - Hidden Markov Models & message passing
+
+### Hidden Markov Models
+
+> Model of choice for sequential data. A form of clustering (or dimensionality reduction) for discrete time series.
+
+#### The HMM (and KAlman Filter)
+
+* Sequential observed outputs from hidden state
+  * states take discrete values (i.e. clusters)
+  * assumes discrete time steps 1, 2, .., T
+* The Kalman filter same with continuous Gaussian r.v.'s 
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9167403.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9167503.png)
 
 
 
