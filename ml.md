@@ -77,6 +77,13 @@ $P(parameters|data) = \dfrac {P(data|parameters)P(parameters)}{P(data)}$
 
 $\widehat {\theta }\left( x_{1},\ldots ,x_{n}\right) =argmax_{\theta \in \Theta }\prod ^{n}_{i=1}p_{\theta }\left( x_{i}\right)$  
 __$\hat{\theta} = argmax_\theta P(X=x|\theta)$__ `MLE`
+
+Methods that can be used to find MLE of parameters of a probabilistic model:
+
+* gradient descent of the negative log likelihood
+* closed form, such taht gradient of NLL = 0
+* EM (expectation maximisation)
+
 ### [MAP](http://www.cnblogs.com/sylvanas2012/p/5058065.html)
 $\hat{\theta}=P(\theta|X = x)$  
 $= argmax_\theta \dfrac {P(X = x|\theta)P(\theta)}{P(X = x)}$  
@@ -281,6 +288,11 @@ Training for logistic regression is amounts to finding $\boldsymbol{w}$ that max
 ​	same as finding $\boldsymbol{w}$ that minimise the sum of cross entropies for each training point
 
 __no closed form solution__ — `stochastic gradient descent` is used
+
+```
+Why does the algorithm for training logistic regression involve gradient descent, while linear regres- sion does not? 
+There’s no closed form solution to the logistic optimisation problem, whereas linear can be solved for a stationary point (the global optimum) using linear alebra. 
+```
 
 ### Basis Expansion
 
@@ -780,6 +792,8 @@ THerefore, for KKT, $\lambda_i^*$ must =0 when points outside the margin and the
 ### Kernel trick
 
 > efficient computation of a dot product in transformed feature space
+>
+> Pros: The kernel trick is replacing explicit expression of a dot product with a function called kernel. The kernel equals to dot product in some feature space, but does not evaluate it explicitly. The advantage is faster computation, and the ability to implicitly use intractably large (even infinite) feature spaces.
 
 P.s. 升维和降维都可能将本来不能二分的问题进行二分
 
@@ -1542,6 +1556,11 @@ Example:
 
 ## L21 - Independence in PGMs
 
+### Marginal and Conditional Probability distributions
+
+* Marginal distribution: assigns a probability to configurations of a set of res, $p(A=a, B=b)$
+* Conditional Distribution: includes conditioning context in the form of a disjoint set of rvs taking on specific values, $p(A=a, B=b| C=c, D=d)$ 
+
 ### Independence relations (D-separation)
 
 * Marginal independence $P(X,Y) = P(X)P(Y)$
@@ -1633,6 +1652,8 @@ Example
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9163929.png)
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9164333.png)
+
+__The elimination algorithm__ is used for efficient marginalisation on probabilistic graphical models (PGMs)
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9164676.png)
 
