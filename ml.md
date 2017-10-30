@@ -89,6 +89,8 @@ $\hat{\theta}=P(\theta|X = x)$
 $= argmax_\theta \dfrac {P(X = x|\theta)P(\theta)}{P(X = x)}$  
 __$= argmax_\theta P(X = x|\theta)P(\theta)$__ `MAP`
 
+> MAP 和 MLE 区别在于MAP多了一个先验概率
+
 ### [MLE ‘algorithm’](https://www.zhihu.com/question/19725590/answer/217025594)
 * given data $x_1,...,x_n$ __define__ probability distribution, $p_\theta$, assumed to have generated the data
 * express likelihood of data, $\prod^{n}_{i=1}p_\theta(x_i)$
@@ -223,7 +225,7 @@ Using regularisation to introduce an additional condition into the system
 
 ### Logistic regression model
 
-Problem: the probability needs to be between 0 and 1. Need to squash the functio
+Problem: the probability needs to be between 0 and 1. Need to squash the function
 
 __logistic funciton__: $f(s) = \dfrac {1}{1 + exp(-s)}$ 
 
@@ -249,7 +251,7 @@ __decision boundary__ is the line where $P(y=1|\boldsymbol{x}) = 0.5$
 
 __Linear regression__ assumes a _Normal distribution_ with a fixed variance and mean given by linear model:
 
-$p(y|\boldsymbol{x} = Normal(y|\boldsymbol{x'w}, \sigma^2))$
+$p(y|\boldsymbol{x}) = Normal(y|\boldsymbol{x'w}, \sigma^2)$
 
 __Logistic regression__ assumes a Bernoulli distribution with parameter given by logistic transform of linear model:
 
@@ -290,7 +292,7 @@ Training for logistic regression is amounts to finding $\boldsymbol{w}$ that max
 __no closed form solution__ — `stochastic gradient descent` is used
 
 ```
-Why does the algorithm for training logistic regression involve gradient descent, while linear regres- sion does not? 
+Why does the algorithm for training logistic regression involve gradient descent, while linear regression does not? 
 There’s no closed form solution to the logistic optimisation problem, whereas linear can be solved for a stationary point (the global optimum) using linear alebra. 
 ```
 
@@ -412,7 +414,7 @@ Lemma: $test Error For x_0 = (bias)^2 + variance + irreducible Error$
 
 simple model $\rightarrow$ underfitting, low variance, high bias
 
-complex model  $\rightarrow$ overfitting, high variance, low 
+complex model  $\rightarrow$ overfitting, high variance, low bias 
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8845714.png)
 
@@ -836,7 +838,7 @@ Or using __Mercer's theorem__
 
 ## L12 - Ensemble methods & Interim Revision
 
- ### Combining models ([Ensemb	le methods](https://stats.stackexchange.com/questions/18891/bagging-boosting-and-stacking-in-machine-learning)) (集成学习)
+ ### Combining models ([Ensemble methods](https://stats.stackexchange.com/questions/18891/bagging-boosting-and-stacking-in-machine-learning)) (集成学习)
 
 __model combination__ (ensemble learning) constructs a set of base models (learners) from a given set of training data and aggregates the ouputs into a single meta-model
 
@@ -881,7 +883,7 @@ shallow trees: low variance, high bias
 
 Algorithm
 
-* init forest as emoty
+* init forest as empty
 * For $c = 1…k$
   * Create new bootstrap sample of training data
   * select random subset of l of the m features
@@ -926,7 +928,7 @@ Reflections: boosting based on iterative sampling and weighted voting, more comp
 | Bagging                      | Boosting                     |
 | ---------------------------- | ---------------------------- |
 | Parallel sampling            | Iterative sampling           |
-| Minimise variance            | Target "hard" instances      |
+| __Minimise variance__        | __Target "hard" instances__  |
 | Simple voting                | Weighted voting              |
 | Classification or regression | Classification or regression |
 | Not prone to overfitting     | Prone to overfitting         |
@@ -1091,7 +1093,7 @@ The log cannot be pushed inside the sum, so taking the derivative of this expres
 
 > is a common way to find parameters of GMM
 
-__EM__ is an algorithm to solve the problem posed by MLE
+__EM__ is an _algorithm_ to solve the problem posed by MLE
 
 ---
 
@@ -1287,7 +1289,7 @@ $S(\boldsymbol{z_1,…,z_n}) = \dfrac {\sum_{i,j}(d(\boldsymbol{x_i,x_j}) - d(\b
 The aim of such MDS is to find $\boldsymbol{z_1,…,z_n}$ that minimise $S_M(\boldsymbol{z_1,…z_n})$, can using gradient descent to deal with it 
 
 ```
-Suppose that there are several vlusters in high dimensional data, points within clusters are close to each other, points from different clusters are far away. MDS attemps to preserve this distance structure, so that clusters are preserved in low dimensional map.
+Suppose that there are several clusters in high dimensional data, points within clusters are close to each other, points from different clusters are far away. MDS attemps to preserve this distance structure, so that clusters are preserved in low dimensional map.
 ```
 
 ### Data representation
@@ -1364,7 +1366,7 @@ In contrast to Isomap, spectral clustering uses a different non-linear mapping t
 
 `TODO`
 
-#### Laplacian eigenmaps `Todo` 
+#### Laplacian eigenmaps `Todo` (拉普拉斯特征映射) 
 
 > is a non-linear dimensionality reduction method
 
@@ -1379,6 +1381,8 @@ In contrast to Isomap, spectral clustering uses a different non-linear mapping t
 ### Uncertainty
 
 > From small training sets, we rarely have complete confidence in any models learned.
+
+贝叶斯回归比较适合数据集少的情况，并且可以防止过拟合
 
 Single prediction is of limited use due to uncertainty
 
@@ -1402,6 +1406,8 @@ maintain uncertainty, marginalise (sum) out unknowns during inference
 ### Bayesian Regression
 
 > Application of Bayesian inference to linear regression, using Normal prior over w
+
+[Bayesian Regression](https://www.zhihu.com/question/22007264)
 
 Recall probabilistic formulation of linear regression
 
@@ -1463,7 +1469,7 @@ can repeat from step 2 when we see more and more data
 
 Binomial dist : $p(k|n,q) = (^n_k)q^k(1-q)^{n-k}$
 
- And its conjugate prior, Beta dist : $p(q) = Beta(q;\alpha, \beta) = \dfrac {\gamma (\alpha + \beta)}{\gamma(\alpha)\gamma(\beta)} q^{\alpha -1}(1 - q)^{\beta -1}$
+ And its conjugate prior[共轭先验](http://blog.csdn.net/baimafujinji/article/details/51374202), Beta dist : $p(q) = Beta(q;\alpha, \beta) = \dfrac {\gamma (\alpha + \beta)}{\gamma(\alpha)\gamma(\beta)} q^{\alpha -1}(1 - q)^{\beta -1}$
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9100590.png)
 
@@ -1515,7 +1521,7 @@ Therefore, assume independence
 
 ### Factoring Joint Distributions
 
-Chain Rule: For any oedering of r.v's can always factor:
+Chain Rule: For any ordering of r.v's can always factor:
 
 $Pr(X_1,X_2,…,X_k) = \prod^k_{i=1}Pr(X_i|X_{i+1},…,X_k)$
 
@@ -1667,9 +1673,9 @@ __The elimination algorithm__ is used for efficient marginalisation on probabili
 
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9166625.png)
 
-When preence of unobserved variables trickier
+When presence of unobserved variables trickier
 
-* Maximise likelihood of oberved data only
+* Maximise likelihood of observed data only
 * Marginalise full joint to get to desired "partial" joint
 * $ argmax_{\theta \in \Theta} \prod^n_{i=1} \sum_{latentj} \prod_j p(X^j = x_i^j|X^{parents(j)} = x_i^{parents(j)})$
 * This won't decouple
@@ -1706,3 +1712,4 @@ When preence of unobserved variables trickier
 
 
 ---
+

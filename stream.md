@@ -205,11 +205,113 @@ When a new item arrives:
 Return 2^z - 1 as the estimated count
 ```
 
-if there are n items, The expected value of $Y_n = 2^{Z_n}$ is n + 1
+if there are n items, The expected value of $Y_n = 2^{Z_n}​$ is n + 1
+$$
+\text{The relationship between } Z_{n-1} \text{ and } Z_n \\
+Pr[Z_n=j] = Pr[Z_{n-1} =j](1- \dfrac {1}{2^j}) + Pr[Z_{n-1}=j-1]\dfrac {1}{2^{j-1}} \\
+E[2^{Z_n}] = \sum_jPr[Z_n=j]2^j = \sum_jPr[Z_{n-1}=j]2^j + \sum_j(2Pr[Z_{n-1}=j-1] - Pr[Z_{n-1}=j]) \\
+\text{The first term on the right hand side is simply } E[2^{Z_{n-1}}] = E[Y_{n-1}] \\
+\text{And the second term collapses to } \sum_jPr[Z_{n-1}=j] = 1 \\
+\therefore E[Y_n] = E[Y_{n-1}] + 1 \\
+\text{Since the expected value of } Y_0 is 1. \text{The expected value of returned solution is } n
+$$
 
+### Sampling
 
+#### Reservoir sampling
 
+When a stream of data arrives, and we can't store it all, one simple idea is to take a uniform random sample of it.
 
+```
+Let S[1..k] be an empty array	#k个可以存储的位置
+Let m be 0
+For each item x
+	increment m
+	if m <= k
+		put x in S[m]	 #先将位置全部填满
+	Else
+		Let r be chosen uniformly in [1..m]	#之后进来的有k/m的几率替换进列表
+		If r <= k, S[r] becomes x
+Output S
+```
+
+When k = 1, for every item in stream, the chance that it's the sampled item is 1/m
+
+---
+
+## L4
+
+### Frequent Items
+
+> Finding frequent items in a stream
+
+#### Misra-Gries algorithm
+
+> key: track __k-1__ items, only item more than __m/k__ times can be record finally 
+
+```
+# we track of k-1 items, with a counter for each
+# only item more than m/k times can be record finally
+
+While the stream is not empty
+    let the new item be x
+    if x is a tracked item
+        increment its counter
+    if not and if fewer than k-1 items are tracked
+        Add x to tracked items, with a count of 1
+    Else
+        Decrement the count of every tracked item
+        evict every tracked item that has count zero
+return the tracked items
+```
+
+For all items, the frequency estimate is at most the true frequency and at least the true frequency minus m/k 
+
+####Distinct items (AMS)
+
+> determining the number of distinct items in a stream
+
+If we record the largest power of two that divides into a hash value we’ve seen... ◦ That’s a good estimate of the number of distinct items in the stream 
+
+```
+# AMS algorithm
+# choose a hash h function uniformly at random from a 2-universal family mapping {1,2…n} to {1,2…n}
+Let z be 0
+For each item x
+    z gets max{z, zeros(h(x))}
+return 2^(z+1/2)
+```
+
+#### BJKST
+
+```
+#BJKST 1
+#choose a hash h function uniformly at random from a 2-universal family mapping {1,2…n} to {1,2…n^3}
+Let t be 96/epsilon^2
+Let Q record the t smallest hash values seen so far [initialize with t values > n^3]
+For each item x
+	Let m be the largest hash value in Q
+	if h(x) < m AND h(x) is not already in Q
+		Replace m with h(x) in Q
+Let m be the largest hash value in Q
+return tn^3/m
+```
+
+#### Universal hash functions
+
+$h_{ab}(x) = ((ax+b)\text{ mod }p)\text{ mod }r$
+
+where the family of hash functions has
+
+a drawn from 1,2,…,p-1
+
+b drawn from 0,1,2…,p-1,p
+
+p is a prime number at least as big as max(n, r)
+
+---
+
+## L5
 
 
 
