@@ -6,25 +6,23 @@ typora-copy-images-to: ./stream_image
 
 #### Review/Mobile
 
-`Author : Min Gao`
+`Author : Min Gao` 
 
-```
-Week 1 – All Slides
-Week 2 – All Slides
-Week 3 – All Slides
-Week 4 – All Slides
-Week 5 – All Slides
-Week 6 – RFID – Slides 1 to 39
-Week 6 - Mobile Games – Slides 1 to 27
-Week 7 – Location Privacy – Slides 1 to 34, 43 to 44, 46 to 47
-Week 7 – Mobile GUIs – Slides 1 to 44
-Week 8 - Wireless Sensor Networks – Slides 1 to 76
-Week 9 - Mobile Networks – Slides 1 to 37
-Week 10 – Advanced Topics – Not Examinable
-Week 11 - Not Examinable
-```
+> [Week 1](#L1) – All Slides
+> [Week 2](#L2 - UX research) – All Slides
+> [Week 3](#L3 - Mobile Interaction Design) – All Slides
+> [Week 4](#L4 - Progessing Sensor Data) – All Slides
+> [Week 5](#L5 - Context & Activity RECOGNITION) – All Slides
+> [Week 6](#L6 - RFID) – RFID – Slides 1 to 39
+> [Week 6](#L6 - Mobile Games) - Mobile Games – Slides 1 to 27
+> [Week 7](#L7) – Location Privacy – Slides 1 to 34, 43 to 44, 46 to 47
+> [Week 7](#L7) – Mobile GUIs – Slides 1 to 44
+> [Week 8](#L8) - Wireless Sensor Networks – Slides 1 to 76
+> [Week 9](#L9) - Mobile Networks – Slides 1 to 37
+> Week 10 – Advanced Topics – Not Examinable
+> Week 11 - Not Examinable
 
-## L1– All Slides
+## L1
 
 ### Technical Constraints
 
@@ -560,21 +558,199 @@ __F1 Score__ = $\dfrac {2}{\dfrac {1}{\text{Recall}} + \dfrac {1}{\text{Precisio
 
  ![40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399.png)
 
+---
 
+## L6 - RFID
 
+#### RFID technology
 
+__Tag__
 
+* Microchip connected to an antenna
+* can be passive, semi-passive, active
+* No battery: passive
+* Semni-passive: circuit is battery-powered except communication
+* secure
+* query tags via radio signals
 
+__Reader__
 
+* Query tags via radio signals
 
+> Example: Visa payWave, payPass
 
+#### RFID (radio frequency identification) 
 
+- Proximity-based technology: determine the tag location by
 
+  measuring the signal’s time of flight (in theory)
 
+Pros:
 
+* Cheap, high volume, large variety
+* Long industry experience
+* scanning even with high speeds
+* no maintenance, simple to manage
 
+Cons:
 
+* No quality of service
+* Only passive data acquistion
 
+#### Characteristics
+
+* No line-of sight necessary
+* Resist environmental conditions: frost, heat, dirt, ...
+* RFID tags with read & write memory
+* Smartcard functionality (JavaCard): cryptographiccomputations for personal contact cards
+
+#### Passive RFIDs
+
+* Do not need an internal power source
+* Operating power is supplied by the reader
+
+Features
+
+3m, cheap
+
+#### Active RFIDs
+
+* Own power source (battery life expectancy: up to 10 years) 
+
+Features
+
+cheap, samll, 100m, combination with sensors
+
+#### RFID Frequencies
+
+* LF: low frequency
+  * good penetration of materials including water and metal
+  * widely adopted
+  * No collision protocol available
+  * Range: 30cm
+* HF: high frequency
+  * Provides anti-collision protocols
+  * 1m
+* UHF : ultra-high frequency
+  * Difficult to penetrate of water and metal
+  * range: 3m
+* Microwave
+  * range: 2m
+  * high data rate
+
+EPC - pass
+
+#### Anti-collision & Singulation
+
+Problem
+
+* RFID tags are simple and cannot communicate with other tags
+* High probability that two tags in communication rangerespond simultaneously
+* Collision
+
+Anti-collision and singulation protocols
+
+* Algorithms to identify all tags
+* Anti-collision: trade time for the possibility to interrogate alltags
+* __Singulation__: identify (iterate through) individual tags
+
+#### ALOHA Protocol
+
+“Tag-Talks-First” behavior: tag automatically sends its ID (and data) if it enters a power field.
+
+If a message collides with another transmission, try resending it later after a random period 
+
+__Collision types__: Partial & complete 
+
+__Reducing collisions in ALOHA__
+
+* Switch-off
+  * After a successful transmission a tag enters the quiet state
+* Slow down
+  * Reduce the frequency of tag responses 
+* Carrier sense
+  * Use ACK signal of the reader in communication with another tag
+  * Reader broadcasts a MUTE command to other tags if itinterrogates one tag
+
+Partial overlap leads to maximum throughput of a 18.4%
+
+#### Slotted ALOHA protocol
+
+* “Reader-Talks-First”: use discrete timeslots SOF (start-of-frame) and EOF (end-of-frame)
+* A tag can send only at the beginning of a timeslot
+* Leads to complete or no collision
+* Increased maximum throughput of 36.8%
+
+#### Frame-slotted ALOHA
+
+* Group several slots into frames
+* Only one tag transmission per frame
+* Limits frequently responding tags
+* Adaptive version: adjust the number of slots per frame
+
+| Protocol            | +                                        | -                                        |
+| ------------------- | ---------------------------------------- | ---------------------------------------- |
+| ALOHA               | Adapts quickly to changing<br />numbers of tags<br />Simple reader design | Worst case: never finishes<br />Small throughput |
+| Slotted ALOHA       | Doubles throughput                       | Requires synchronization<br />Tags have to count slots |
+| Frame-slotted-ALOHA | Avoids frequently responding<br />tags   | Frame size has to be known or transmitted<br />similar to slotted ALOHA |
+
+#### Binary Tree Protocol I
+
+* DFS
+  * “Reader-Talks-First” behavior: reader broadcasts a request command with an ID as a parameter
+  * A sub-tree T is searched by an identifier prefix
+  * Only tags with an ID lower or equal respond 
+  * An interrogated tag is instructed to keep quiet afterward 
+  * Repeat algorithm until no collision occurs or all tags are quiet
+
+#### Binary Tree Protocol II
+
+* Each sub-tree T corresponds to an identifier prefix
+* Reader searches T by sending prefix, interrogating tags for their next bit
+  * If all “0” search Left(T)
+  * If all “1” search Right(T)
+  * If both “0” and “1” search Left(T) and Right(T)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/screenshot.png)
+
+#### RFID Applications
+
+* E-passports
+  * Security risk: forgery
+* Transportation payment
+* Electronic toll collection
+  * Security risk: denial of service
+* Vehicles : Smart key
+* Supply chain & inventory management
+* Preventation
+* product tracking
+  * privacy risk: tracking
+* Human implants
+
+#### Status Quo of RFID Systems
+
+* No authentication
+  * Readers are blind: if tag does not reply, reader does not know about it
+  * Tags are promiscuous and reply to any reader
+* No access control
+  * Malicious reader can link to a tag
+  * Malicious tag can spoof a reader
+* No encryption
+  * Eavesdropping possible (especially for the reader)
+* Man-in-the-middle-attack
+
+#### Privacy Concerns
+
+* Unauthorized surveillance
+  * simple RFID tags support no security mechanisms
+  * Permanent RFID serial numbers can compromise privacy
+* Potential risks
+  * Tags in goods might be a potential risk
+  * Threat: scanning of assts of high value
+
+#### RFID Tag Privacy
+
+`TODO`
 
 
 
