@@ -205,6 +205,12 @@ Hunch -> Hack -> Trial -> Idea =>> Design -> Prototype -> Test -> Principles -> 
   * Eye tracking
   * Lab or In-The-Wild (Lab is better)
 
+|                     | Pons                                     | Cons                                     |
+| ------------------- | ---------------------------------------- | ---------------------------------------- |
+| Ethnography         | in depth<br />Better product             | Not cheap<br />Time consuming<br />Observer effect<br />Specific |
+| Interview           | Simple<br />Cost cheaper<br />Context    | Forget<br />Time-consuming<br />You have not direct observation<br />Formal |
+| Experience sampling | Context timely<br />Cheap<br />Scale up<br />Feeling | Insight<br />Dirty hand<br />Input       |
+
 ### How to choose a method
 
 [research methods](https://www.nngroup.com/articles/which-ux-research-methods/)
@@ -376,41 +382,183 @@ Q_i =  \begin{bmatrix} 0&0&0&0\\ 0&0&0&0\\ 0&0&\sigma^2&0 \\ 0&0&0&\sigma^2\end{
 \text{Dynamic noise is : } w_{i-1} \sim N(0, Q_i) \\
 $$
 
-
+$$
+\text{All together} \\
+\text{Initial state estimate: } x_o = \begin{pmatrix} x_0\\ y_0 \\ v_0^{(x)} \\ v_0^{(y)}  \end{pmatrix} = \begin{pmatrix} z_0^{(x)}\\z_0^{(y)}\\0\\0 \end{pmatrix} \\
+\text{Initial estimate of state error covariance : }\\
+P_0 = \begin{bmatrix} \sigma^2&0&0&0\\0&\sigma^2&0&0\\0&0&\sigma_s^2&0\\0&0&0&\sigma_s^2 \end{bmatrix}\\
+\text{STEP 1: PREDICT}\\
+x_i^{predicted} = \phi_{i-1}x_{i-1}^{corrected} \\
+\text{Extrapolate the state error covariance: } \\
+P_i^{predicted} = \phi _{i-1} P_{i-1}^{corrected}\phi_{i-1}^{T} + Q_{i-1} \\
+\text{STEP 2: MEASURE} \\
+\text{Compute the Kalman gain: } \\
+K_i = \dfrac {P_i^{predicted}H_i^{T}}{H_iP_i^{predicted}H_i^T + R_i} = H_i^{-1} \dfrac {H_iP_i^{predicted}H_i^{T}}{H_iP_i^{predicted}H_i^T + R_i} \\
+R_i \text{ is the uncertainty from the measurement} \\
+H_iP_i^{predicted}H_i^{T} \text{ is the uncertainty propagated by the model} \\
+\text{ Update extrapolations with new measurements: } \\
+x_i^{corrected} = x_i^{predicted} + K_i (z_i - H_i x_i^{predicted}) \\
+p_i^{corrected} = (I - K_i H_i ) P_i^{predicted}
+$$
 
 1. Make prediction most like value based on dynamic model. 
 2. measure use sensor data to correct the prediction. 
 
-Dynamic model of the system No lag Tunable trade-off between model and measurement. Uncertainty estimate parameters are not intuitive Overshooting
+### Pros and Cons for Kalman filter
 
+Pros:
 
+* Dynamic model of the system
+* no lag
+* Tunable trade-off between model and measurement
+* Uncertainty estimate
 
-Bayesian, Gaussian, Linear, Online
+cons:
 
-**Particle Filter**
+* Parameters are not intuitive
+* Overshooting
+
+#### Kalman and Particle
+
+* Kalman is cheap to run
+* Particle is general
+
+| Kalman   | Particle        |
+| -------- | --------------- |
+| Bayesian | Bayesian        |
+| Gaussian | Gaussian or not |
+| Linear   | Linear or not   |
+| Online   | Online          |
+
+#### Particle Filter
 
 Generate hypotheses -> compute weights -> resample
 
-pros:
+Pros:
 
 1. General -> because it doesn't make any assumptions 
 2. Continuous or discrete values is available 
 3. Great result 
 
-cons:
+Cons:
 
 1. Lots of memory
 2. Very slow
 
+---
+
+## L5 - Context & Activity RECOGNITION
+
+### Elements of the user's context
+
+* Location
+* User's identity
+* Time of the day
+* Sound levels
+* Light levels
+* User's motion
+
+### Context awareness (activities)
+
+> Who What Where When Why
+
+- context __Display__ (e.g. GPS can track where you are)
+- contextual __augmentation__ (e.g. google photo use location and time to create augment info)
+- __context-aware configuration__ (configure how devices are used)
+- __context- triggered actions__ (changing brightness when light changes)
+- __contextual adaptation of the environment__ (turn on heating when go to sleep)
+- __contextual mediation__ (based on the limited and needs of the context)
+- __context-aware presentation__ (e.g. switch Portrait to landscape)
+
+### Characteristics of Human Activity Recognition (HAR) Systems
+
+- __Execution__ (the timing of the execution of the recognition)
+  - __online__:  process data in real time. e.g. human-computer interaction
+  - __offline__: records the sensor data first. The recognition is performed afterwards. e.g. health monitoring
+- __Generalisation__
+  - __user independent__: working with everyone
+  - __user specific__: single person data. Performance is usually higher than in the user-independent case, but does not generalise as well to other users.
+  - __temporal__: both cases.
 
 
+- __Recognition__
+  - __continuous__ : stream of data. The system automatically “spots” the occurrence of activities or gestures in the streaming sensor data. 
+  - __segmented__ : The system assumes that the sensor data stream is segmented at the start and end of a gesture by an oracle. 
+- __Activities__
+  - __periodic__ : Activities or gestures exhibiting periodicity, such as walking, running, rowing, biking, etc. Sliding window segmentation and frequency-domain features are generally used for classification. 
+  - __sporadic__ :The activity or gesture occurs sporadically, interspersed with other activities or gestures. Segmentation plays a key role to isolate the subset of data containing the gesture. 
+  - __static__ : The system deals with the detection of static postures or static pointing gestures. 
+- __System model__
+  - __stateless__ : The recognition system does not model the state of the world. 
+  - __stateful__: The system uses a model of the environment, such as the user’s context or an environment map with location of objects. 
 
+```
+Imagine an app that analyses your shopping lists and suggests at the end of the week recipes with a better nutriotional value based on the ingredients of that list. Check all characteristics that apply to this app.
+Offline, User-specific, Periodic
+```
 
+### The processing pipeline
 
+* [sensor](https://en.wikipedia.org/wiki/List_of_sensors)
 
+#### Choosing a sensor
 
+* what is it measuring
 
+- Accuracy and precision
+- range of the sensor
+- resolution or sensitivity of the sensor
+- sampling rate or frame rate
+- cost
 
+#### Preprocessing
+
+* Interpolation 
+* downsampling
+
+#### Segmentation
+
+- sliding window
+  - Non-overlapping sliding window
+  - overlapping sliding window
+- energy based
+- additional context sources
+
+#### Feature extraction
+
+- Min
+- Max
+- Range
+- Skewness
+- Mean
+- Energy
+- Kurtosis
+- Variance
+
+####Classifiers
+
+- Hidden Markov Models
+- Dynamic Time Wraping
+- kNN
+- AdaBoost
+- Support Vector Machines
+- Random Forest 
+
+#### Reporting performance
+
+What proportion of the labelled items were correct?
+
+* __Precision__ = True positives / (True positives + False positives)
+
+What proportion of the windows with that activity were recognised?
+
+* __Recall__ = True positives / (True positives + False negatives)
+
+__F1 Score__ = $\dfrac {2}{\dfrac {1}{\text{Recall}} + \dfrac {1}{\text{Precision}}} = 2 \dfrac {\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$ 
+
+#### Confusion Matrix
+
+ ![40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399.png)
 
 
 
