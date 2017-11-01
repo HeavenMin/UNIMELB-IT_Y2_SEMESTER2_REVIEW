@@ -1,5 +1,5 @@
 ---
-typora-copy-images-to: ./stream_image
+typora-copy-images-to: ./mobile_image
 ---
 
 # COMP90018 Mobile Computing Systems Programming (Mo)
@@ -70,7 +70,7 @@ __Mobile computing__ is about __Devices__, __Users__, __Agents__
 
 UX {User Experience Design} [Usability: A part of the User Experience](https://www.interaction-design.org/literature/article/usability-a-part-of-the-user-experience)
 
- ![6C8BF49E-751E-4A0C-BCA0-D96E90B6BBDC](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/6C8BF49E-751E-4A0C-BCA0-D96E90B6BBDC.png)
+ ![6C8BF49E-751E-4A0C-BCA0-D96E90B6BBDC](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/6C8BF49E-751E-4A0C-BCA0-D96E90B6BBDC.png)
 
 #### HCI
 
@@ -125,7 +125,7 @@ HCD is a creative approach to problem solving and the backbone. It’s a process
   * Does it fit the client’s budget
   * What is the ROI/Opportunity cost 
 
- ![B3E9A888-3F5C-4CF8-BAF1-196DF59EE997](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/B3E9A888-3F5C-4CF8-BAF1-196DF59EE997.png)
+ ![B3E9A888-3F5C-4CF8-BAF1-196DF59EE997](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/B3E9A888-3F5C-4CF8-BAF1-196DF59EE997.png)
 
 [Shared Value](https://crowdfavorite.com/the-value-of-balancing-desirability-feasibility-and-viability/)
 
@@ -142,7 +142,7 @@ Problem __ divergent thinking (<-discover , develop->) __ Solution
 * __Develop__ potential solutions
 * __Deliver__ solutions that work
 
- ![AACB67FE-0337-4EF5-AEC0-C102EB8B42AF](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/AACB67FE-0337-4EF5-AEC0-C102EB8B42AF.png)
+ ![AACB67FE-0337-4EF5-AEC0-C102EB8B42AF](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/AACB67FE-0337-4EF5-AEC0-C102EB8B42AF.png)
 
 ```
 Brainstorming is a technique that involves __divergent__ thinking.
@@ -556,7 +556,7 @@ __F1 Score__ = $\dfrac {2}{\dfrac {1}{\text{Recall}} + \dfrac {1}{\text{Precisio
 
 #### Confusion Matrix
 
- ![40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399.png)
+ ![40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/40DDF3D8-FDCE-4CDF-A783-CF5BE42C6399.png)
 
 ---
 
@@ -711,7 +711,7 @@ Partial overlap leads to maximum throughput of a 18.4%
   * If all “1” search Right(T)
   * If both “0” and “1” search Left(T) and Right(T)
 
- ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/stream_image/screenshot.png)
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot.png)
 
 #### RFID Applications
 
