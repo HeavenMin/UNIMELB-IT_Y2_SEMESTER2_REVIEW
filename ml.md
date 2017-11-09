@@ -31,7 +31,7 @@ typora-copy-images-to: ./image
 
 ### Evaluation
 * Pick an __evaluation metric__ comparing label vs prediction
-* Procure an independent, labelled test set
+* Produre an independent, labelled test set
 * “Average” the evaluation metric over the test set
 ### Evaluation Metrics
 * Accuracy
@@ -155,7 +155,7 @@ Therefore, under this model, maximising log-likelihood as a function of w is equ
 
 The model assumes $\boldsymbol{y \approx Xw}$
 
-To find $\boldsymbol{w}$, minimise the __sum of squared errors__
+To find $\boldsymbol{w}$, minimise the __sum of squared errors__ (sum of the squared residual)
 
 $L = \sum^{n}_{i=1}(y_i - \sum^{m}_{j=0}X_{ij}w_j)^2 = ||\boldsymbol{y - Xw}||^2$
 
@@ -493,6 +493,11 @@ Nodes in ANN can have various activation functions
 * ReLu: $f(s) = \max (0, x)$
 * Tanh:  $tanh(s) = 2sigmoid(2x) - 1 = \dfrac {e^x - e^{-x}}{e^x + e^{-x}}$
 
+```
+Explain the advantage of using a sigmoid function rather than a step function as the activation function in a neural network.
+differentiable at all points across its range. and it has a useful gradient while step function has 0 gradients. Therefore, the sigmoid function allows gradient based optimisation.
+```
+
 ### ANN
 
  __Artifical neural network__(ANN) is a network of procesisng elements
@@ -765,6 +770,8 @@ $L_{KKT}(\boldsymbol{w}, b , \boldsymbol{\lambda}) = \dfrac {1}{2} ||\boldsymbol
 
 ​			(primal objective)			(constraints)
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9616909.png)
+
  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-8932266.png)
 
 Given these, in order to solve the primal problem, we pose a new optimisation problem, called __Lagrangian dual problem__ also called __(quadratic optimisation problem)__ `question`
@@ -833,6 +840,16 @@ Or using __Mercer's theorem__
 
 * choose learning method (model)
 * choose feature space mapping
+
+### Representer theorem
+
+A large class of linear methods can be formulated (represented) such that both training and making predictions require data only in a form of a dot product.
+
+### Kernel Prove
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9618643.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9618671.png)
 
 ---
 
@@ -976,7 +993,7 @@ Reflections: Mathematically simple but computationally expansive method.
 * [SVM](#L9 - Support Vector Machine (SVM) hard margin)
   * Model: label is based on sign of $s = b + \sum^m_{i=1}x_iw_i = b + \boldsymbol{w'x}$
   * Loss funtion: [hard margin SMV loss](#SVM Objective as Regularised Loss); [hinge loss](#hinge loss: soft margin SVM loss)
-  * Optimisation: [Quadratic Programming](#SVM training preliminaries)
+  * Optimisation: [Quadratic Programming](#SVM training preliminaries), Lagrangain dual problem
   * Notes: Specialised optimisation algorithms `question`
 * [Random Forest](#bagging example: Random forest)
   * Model: average of decision trees
@@ -1027,6 +1044,8 @@ $d_{ij} = ||\boldsymbol{x_i - x_j}|| = \sqrt {\sum^m_{l=1} \left( \boldsymbol{(x
 #### Kink method and gap statistics
 
 `question`
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9619139.png)
 
 Manual inspection of minimised within cluster variation as function of k
 
@@ -1499,6 +1518,14 @@ with $M_i$ as model i and D the dataset
 
 The evidence : $p(D|M) = p(\boldsymbol{y|X}, M)$
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9623820.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9623976.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9623995.png)
+
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/image/screenshot-9624013.png)
+
 ---
 
 ## L20 - PGM Representation
@@ -1713,3 +1740,8 @@ When presence of unobserved variables trickier
 
 ---
 
+#### Fundamental HMM tasks
+
+* evaluation
+* decoding
+* learning

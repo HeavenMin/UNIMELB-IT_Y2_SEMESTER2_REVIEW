@@ -194,7 +194,7 @@ Better k is $k = \ln(2)n/m$
 
 $k$ is the num of hash functions
 
-$n$ is the number of distinct elements in the stream
+$m$ is the number of distinct elements in the stream
 
 ### Counters
 
@@ -264,7 +264,7 @@ When k = 1, for every item in stream, the chance that it's the sampled item is 1
 
 ### Frequent Items
 
-> Finding frequent items in a stream
+> Finding frequent items in a stream Top k-1
 
 #### Misra-Gries algorithm
 
@@ -351,7 +351,7 @@ $$
 \end{align*}
 $$
 
-
+取10个最小的中选最大的
 
 #### Universal hash functions
 
@@ -439,7 +439,7 @@ because of 4-wise independence
 We have some terms with $h(i)^4$ and others with $h(i)^2h(j)^2$
 
 *  All other terms cancel
-* And there are $(^4_2) = 6$ copies of each $h(i)^2h(j)^2$
+*  And there are $(^4_2) = 6$ copies of each $h(i)^2h(j)^2$
 
 So $E[Z^4] = F_4 + 6 \sum_i \sum_{j>i}f_i^2f_i^2$
 
@@ -474,7 +474,7 @@ The estimate returned by the count-min sketch is never an __underestimate__ of a
 
 ### Count sketch
 
-`question` explain the count sketch
+`question` explain the count sketch  （一行一个h(j) 和 g(j)）
 
 * a family of d hash functions , which are also 2-universal, and map to {-1,+1}
 * When we see an item count increment c, instead of adding c to one slot per row in the table, we add $g_j(x) \times c$
