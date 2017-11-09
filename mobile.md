@@ -15,10 +15,10 @@ typora-copy-images-to: ./mobile_image
 > [Week 5](#L5 - Context & Activity RECOGNITION) – All Slides
 > [Week 6](#L6 - RFID) – RFID – Slides 1 to 39
 > [Week 6](#L6 - Mobile Games) - Mobile Games – Slides 1 to 27
-> [Week 7](#L7) – Location Privacy – Slides 1 to 34, 43 to 44, 46 to 47
-> [Week 7](#L7) – Mobile GUIs – Slides 1 to 44
-> [Week 8](#L8) - Wireless Sensor Networks – Slides 1 to 76
-> [Week 9](#L9) - Mobile Networks – Slides 1 to 37
+> [Week 7](#L7 Location Privacy) – Location Privacy – Slides 1 to 34, 43 to 44, 46 to 47
+> [Week 7](#L7 Mobile GUIs) – Mobile GUIs – Slides 1 to 44
+> [Week 8](#L8 Wireless Sensor Networks) - Wireless Sensor Networks – Slides 1 to 76
+> [Week 9](#L9 Mobile Networks) - Mobile Networks – Slides 1 to 37
 > Week 10 – Advanced Topics – Not Examinable
 > Week 11 - Not Examinable
 
@@ -103,7 +103,7 @@ Understand the domain $\rightarrow$ Design $\rightarrow$ Build the App $\rightar
 
 HCD is a creative approach to problem solving and the backbone. It’s a process that starts with the people you’re designing for and ends with new solution that are tailor made to suit their needs. HCD is all about building a deep empathy with the people you’re designing for;generating tons of ideas;building a bunch of prototypes;sharing what you’ve made with the people you’re designing for; and eventually putting your innovative new solution out in the world.
 
-#### HCD consists of three phases
+#### HCD consists of three phases (3i)
 
 * __Inspiration__ : you’ll learn directly from the people you’re designing for as you immerse yourself in their lives and come to deeply understand their needs
 * __Ideation__ : you’ll make sense of what you learned, identify opportunities for design, and prototype possible solutions.
@@ -158,7 +158,7 @@ Hunch -> Hack -> Trial -> Idea =>> Design -> Prototype -> Test -> Principles -> 
 
 * __Looking__: Observational Methods
 
-  * [Ethnography](https://www.interaction-design.org/literature/book/the-encyclopedia-of-human-computer-interaction-2nd-ed/ethnography) It is a qualitative orientation to research that emphasises the detailed observation of people in natually occurring settings.
+  * [Ethnography](https://www.interaction-design.org/literature/book/the-encyclopedia-of-human-computer-interaction-2nd-ed/ethnography) It is a qualitative orientation to research that emphasises the detailed observation of people in natually occurring settings. 强调人在自然发生的设置详细的观察。
   * [Shadowing](https://www.interaction-design.org/literature/article/shadowing-in-user-research-do-you-see-what-they-see) The researcher accompanies the user and observes how they use the product or service within their natual environment.
   * [Video Diary](https://www.nngroup.com/articles/diary-studies/) It collect quantitative data which is self-reported by participants over a period.
   * [Case Study](http://dl.acm.org.ezp.lib.unimelb.edu.au/citation.cfm?id=2994146)
@@ -193,6 +193,7 @@ Hunch -> Hack -> Trial -> Idea =>> Design -> Prototype -> Test -> Principles -> 
 
   * Sketching  [📚: Sketching User Experiences & Sketching user experiences The workbook]
   * Task Flows {Tools: [Marvel](https://marvelapp.com/sketch/), [balsqmiq](https://balsamiq.com), [sketch](https://www.sketchapp.com)}
+    * paper prototypes
     * Pads
     * Carousel
     * Wireframes
@@ -566,146 +567,174 @@ __F1 Score__ = $\dfrac {2}{\dfrac {1}{\text{Recall}} + \dfrac {1}{\text{Precisio
 
 __Tag__
 
-* Microchip connected to an antenna
-* can be passive, semi-passive, active
-* No battery: passive
-* Semni-passive: circuit is battery-powered except communication
+* Microchip connected to an antenna 连接天线的微芯片
+* can be __passive, semi-passive, active__ 
+* No battery: __passive__
+* Semni-passive: circuit is battery-powered except communication 除了通信外，电力是电池供电的
 * secure
 * query tags via radio signals
 
 __Reader__
 
-* Query tags via radio signals
+* Query tags via __radio signals__
 
 > Example: Visa payWave, payPass
 
 #### RFID (radio frequency identification) 
 
+* Reader sends a radio __interrogation signal__ |询问信号
+* RFID tag backscatters its ID       |RFID tag 反射 它的ID
+
 - Proximity-based technology: determine the tag location by
 
-  measuring the signal’s time of flight (in theory)
+  measuring the signal’s time of flight (in theory)    |通过测量信号的飞行时间来确定标签位置（理论上）
 
 Pros:
 
 * Cheap, high volume, large variety
 * Long industry experience
-* scanning even with high speeds
+* scanning even with high speeds (300km/h)
 * no maintenance, simple to manage
 
 Cons:
 
 * No quality of service
-* Only passive data acquistion
+* Only passive data acquistion (asymmetric communication)
 
 #### Characteristics
 
 * No line-of sight necessary
-* Resist environmental conditions: frost, heat, dirt, ...
+* Resist environmental conditions: frost, heat, dirt, …  |抵抗环境条件：霜冻，炎热，灰尘，…
 * RFID tags with read & write memory
 * Smartcard functionality (JavaCard): cryptographiccomputations for personal contact cards
+
+__Technical Features for RFID__:
+
+* Reader: simultaneous detection of up to 256 tags, scanning of up to 40 tags per second
+* Response time of an RFID tage: less than 100 miliseconds
 
 #### Passive RFIDs
 
 * Do not need an internal power source
 * Operating power is supplied by the reader
 
-Features
+__Features__
 
-3m, cheap
+3m, can be very small,  very cheap
 
 #### Active RFIDs
 
 * Own power source (battery life expectancy: up to 10 years) 
 
-Features
+__Features__
 
-cheap, samll, 100m, combination with sensors
+* cost a few dollars
+* samll 
+* 100m
+* combination with sensors
+* deployment in more difficlut RF situations(water)
+* Tags have tupically a higher scanning reliability
 
 #### RFID Frequencies
 
-* LF: low frequency
-  * good penetration of materials including water and metal
+* __LF__: low frequency
+  * good __penetration__ of materials including water and metal
   * widely adopted
-  * No collision protocol available
-  * Range: 30cm
-* HF: high frequency
-  * Provides anti-collision protocols
-  * 1m
-* UHF : ultra-high frequency
+  * __No collision protocol__ available
+  * Range: __30cm__
+* __HF__: high frequency
+  * Provides __anti-collision__ protocols
+  * __1m__
+* __UHF__ : ultra-high frequency
   * Difficult to penetrate of water and metal
-  * range: 3m
-* Microwave
-  * range: 2m
+  * range: __3m__
+* __Microwave__
+  * range: __2m__
   * high data rate
 
-EPC - pass
+#### EPC (electronic product code)
+
+* unique number to identify an item in the supply chain
+
+__EPC Device classes__
+
+| EPC Class | Definition                           | Programming     |
+| --------- | ------------------------------------ | --------------- |
+| Class 0   | read only , passive tags             | by manufacturer |
+| Class 1   | write once, read many , passive tags | by customer     |
+| Class 2   | rewritable passive tags              | Reprogrammable  |
+| Class 3   | Semi-passive tags                    | Reprogrammable  |
+| Class 4   | active tags                          | Reprogrammable  |
+| Class 5   | Readers                              | Reprogrammable  |
 
 #### Anti-collision & Singulation
 
-Problem
+__Problem__
 
-* RFID tags are simple and cannot communicate with other tags
-* High probability that two tags in communication rangerespond simultaneously
-* Collision
+* RFID tags are simple and __cannot communicate with other tags__
+* High probability that __two tags in communication range respond simultaneously__
+* __Collision__: response on the same frequency at the same time
 
-Anti-collision and singulation protocols
+__Anti-collision and singulation protocols__
 
 * Algorithms to identify all tags
-* Anti-collision: trade time for the possibility to interrogate alltags
+* __Anti-collision__: trade time for the possibility to query all tags
 * __Singulation__: identify (iterate through) individual tags
 
-#### ALOHA Protocol
+#### ALOHA Protocol (resend later)
 
-“Tag-Talks-First” behavior: tag automatically sends its ID (and data) if it enters a power field.
-
-If a message collides with another transmission, try resending it later after a random period 
+* based on the classical ALOHA protocol
+* __“Tag-Talks-First”__ behavior: tag automatically sends its ID (and data) if it enters a power field.
+* If a message collides with another transmission, try resending it later after a random period 
 
 __Collision types__: Partial & complete 
 
 __Reducing collisions in ALOHA__
 
-* Switch-off
-  * After a successful transmission a tag enters the quiet state
-* Slow down
-  * Reduce the frequency of tag responses 
-* Carrier sense
+* __Switch-off__
+  * After a successful transmission a tag enters the __quiet state__
+* __Slow down__
+  * __Reduce the frequency__ of tag responses 
+* __Carrier sense__
+  * no carrier sense possible
   * Use ACK signal of the reader in communication with another tag
-  * Reader broadcasts a MUTE command to other tags if itinterrogates one tag
+  * Reader broadcasts a MUTE command to other tags if it query one tag
 
 Partial overlap leads to maximum throughput of a 18.4%
 
 #### Slotted ALOHA protocol
 
-* “Reader-Talks-First”: use discrete timeslots SOF (start-of-frame) and EOF (end-of-frame)
-* A tag can send only at the beginning of a timeslot
-* Leads to complete or no collision
+* __“Reader-Talks-First”__ : use discrete timeslots SOF (__start-of-frame__) and EOF (__end-of-frame__)
+* A tag can send only __at the beginning of a timeslot__
+* Leads to __complete or no collision__
 * Increased maximum throughput of 36.8%
+* can early end
 
 #### Frame-slotted ALOHA
 
-* Group several slots into frames
+* Group __several slots__ into frames
 * Only one tag transmission per frame
 * Limits frequently responding tags
 * Adaptive version: adjust the number of slots per frame
 
 | Protocol            | +                                        | -                                        |
 | ------------------- | ---------------------------------------- | ---------------------------------------- |
-| ALOHA               | Adapts quickly to changing<br />numbers of tags<br />Simple reader design | Worst case: never finishes<br />Small throughput |
-| Slotted ALOHA       | Doubles throughput                       | Requires synchronization<br />Tags have to count slots |
-| Frame-slotted-ALOHA | Avoids frequently responding<br />tags   | Frame size has to be known or transmitted<br />similar to slotted ALOHA |
+| ALOHA               | Adapts quickly to changing<br />numbers of tags<br />Simple reader design | Worst case: never finishes<br />__Small throughput__ |
+| Slotted ALOHA       | __Doubles throughput__                   | Requires synchronization<br />__Tags have to count slots__ |
+| Frame-slotted-ALOHA | Avoids frequently responding tags        | Frame size has to be known or transmitted<br />similar to slotted ALOHA |
 
 #### Binary Tree Protocol I
 
-* DFS
-  * “Reader-Talks-First” behavior: reader broadcasts a request command with an ID as a parameter
+* __DFS__
+  * __“Reader-Talks-First”__ behavior: reader __broadcasts__ a request command with an ID as a parameter
   * A sub-tree T is searched by an identifier prefix
   * Only tags with an ID lower or equal respond 
   * An interrogated tag is instructed to keep quiet afterward 
-  * Repeat algorithm until no collision occurs or all tags are quiet
+  * __Repeat algorithm until no collision occurs or all tags are quiet__
 
 #### Binary Tree Protocol II
 
-* Each sub-tree T corresponds to an identifier prefix
+* Each sub-tree T corresponds to an __identifier prefix__
 * Reader searches T by sending prefix, interrogating tags for their next bit
   * If all “0” search Left(T)
   * If all “1” search Right(T)
@@ -716,7 +745,7 @@ Partial overlap leads to maximum throughput of a 18.4%
 #### RFID Applications
 
 * E-passports
-  * Security risk: forgery
+  * Security risk: __forgery__
 * Transportation payment
 * Electronic toll collection
   * Security risk: denial of service
@@ -729,15 +758,15 @@ Partial overlap leads to maximum throughput of a 18.4%
 
 #### Status Quo of RFID Systems
 
-* No authentication
+* __No authentication__ 认证
   * Readers are blind: if tag does not reply, reader does not know about it
   * Tags are promiscuous and reply to any reader
-* No access control
+* __No access control__ 访问控制
   * Malicious reader can link to a tag
   * Malicious tag can spoof a reader
-* No encryption
+* __No encryption__
   * Eavesdropping possible (especially for the reader)
-* Man-in-the-middle-attack
+* __Man-in-the-middle-attack__
 
 #### Privacy Concerns
 
@@ -750,7 +779,715 @@ Partial overlap leads to maximum throughput of a 18.4%
 
 #### RFID Tag Privacy
 
+* killing: tag deactivation
+* user intervention
+* active jamming
+* hash-locking
+* encrypting
+* one time identifiers
+* Hiding: blocker tags
+* keyless "encryption"
+* __Threats of RFID__
+  * Cloning
+  * Forgery
+  * Relabeling
+
+---
+
+## L6 - Mobile Games
+
+### Low-level UI
+
+#### Tasks of a low-level API
+
+* precise control about what is drawn
+* control about the location of an item
+* Handle basic events such as key presses
+* Access specific keys
+
+#### User interfaces versus Games
+
+| UI is event-driven                     | Game is time-driven                      |
+| -------------------------------------- | ---------------------------------------- |
+| UI is updated in reponse to user input | Run continuously                         |
+| Events: pressing a soft key,           | Updates occur with and without user input |
+
+#### Gamle Loop: main Thread
+
+1-> Check for user input -> update game state -> update screen buffer -> flush buffer to display ->1
+
+#### The purpose of a game API
+
+__Overview__:
+
+* Screen buffer
+  * __GameCanvas__
+    * Dedicated screen buffer
+    * supports incremental updates
+    * Flush graphics: display contents of the buffer
+* key polling
+  * Query the status of keys
+    * is a key pressed and which key is pressed
+    * Duration of a key press
+    * are keys pressed simultaneously or repeatedlt
+* Layers
+  * sprites and tiled layers
+  * can be visible or invisible
+* sprites
+  * Definition
+    * Figure in 2D that is part of a larger game scene
+    * parts can be transparent
+    * A sequence of sprites enables animation
+  * Animations
+    * Frame sequence of a sprite
+    * Ordered list of frames to be shown
+    * Frames can be omitted, repeated
+    * Sprite is n frames
+* tiles
+  * Tile is a small image that can be combined with other tiles to larger images
+  * 2D games with large background images are composed of tiles
+  * A set of tiles is small, little memory required
+* __collision detection__
+  * Collision rectangle
+    - each sprite has a collision rectangle, usually the size of the sprite
+  * Boundary-level detection (fast)
+    - Test if two collision rectangles intersect
+  * Pixel-level detection (precise)
+    - collision if opaque(不透明) pixels touch
+
+#### What is different for Mobile Games
+
+> Features of Mobile Game development
+
+* Processing & network
+  * less cpu power, no hardware acceleration. less memory, intermittent network connections
+* Hardware
+  * Input capabilities
+  * screen size
+* Portability
+  * Sensors: locaiton, acceleration, camera
+  * Context-awareness, use environment as part of the game 
+  * Device as controller
+  * Mixed reality games, location-based games
+
+#### Tips for good UI
+
+| Prefer               | Avoid                     |
+| -------------------- | ------------------------- |
+| Relative positioning | Absolute positioning      |
+| Text extensively     | many pictures             |
+| compress images      | large images              |
+| reduce image size    | Animations (except games) |
+| Separate page sets   | Horizontal scrolling      |
+
+### Usability Guidelines for Mobile Games
+
+#### Game Start
+
+* Opening screen
+  * splash screen
+  * Limit the number of screens before the game start
+* Main menu
+  * game's main menu: custom graphics
+  * Avoid using UI components with standard graphics
+  * Help item
+
+#### Game Controls
+
+* General design
+  * avoid the need for pressing two key simultaneously: diffucult on a small keyboard
+  * gestures
+  * one key one command
+* In-game design
+  * pasue the game and show the main menu
+* Pause & save
+  * Single-player games
+    * provide save game capability
+  * Two-player games
+    * pause model applies to both players
+    * provide information about why the game is paused
+  * Multiplayer games
+    * interruption of one player does not impact other palyers
+    * switch player to background or drop player from the game
+* Feedback
+  * status information
+    * Health, points ,level ,score
+    * Not too much technical information
+  * Clear feedback on game goals
+  * Multiplayer games
+    * who has won
+* Game Experience
+  * Easy to learn, but difficult to master
+  * Rewards
+  * Difficulty level
+* Noise pollution
+  * Sound volume
+    * Default volume
+    * enable different sound levels for background music and game sounds
+    * ability to turn sounds off quickly
+    * no high-pitched sounds
+  * Bluetooth multiplayer games
+    * Synchronize the background music
+* Distinctive Graphics
+  * avoid small text on the screen
+  * Appearance of game objects and characters
+    * Easily understood
+    * different items should look different
+  * Multiplayer games need to identify who is who
+* Post game
+  * High score lists
+  * easy restart
+
+#### Criteria for mobile games
+
+* easy to learn
+* Interruptible
+* Subscription
+* social interactions
+* take advantage of smartphones
+
+#### optimizing mobile games
+
+Fisrt complete the game, optimize later
+
+90/10 rule
+
+* 90 percent of execution time
+* 10 percent of the code
+* use a profiler
+
+But aim to improve the actual algorithms before resorting to low-level techniques
+
+#### Optimization trick
+
+* use __stringbuffer__ instead of string
+* access class cariables directly
+* use local variables
+* variables are more efficient than arrays
+* count down in loops
+* use compound operators
+* remove constant calculations in loops
+* reuse objects
+* assign null to unused objects & unused threads
+
+---
+
+## L7 Location Privacy
+
+> Location-based services & location privacy
+
+__LBS__ : location-based services	|基于位置的服务
+
+* services that integrate a mobile's device location with other information
+
+Mobile operators:
+
+* Voice
+* data
+* location information
+
+__push v.s. pull__
+
+* user receives information without an active request
+* user actively pulls information from the network
+
+#### Applicaiton
+
+* infotainment services 娱乐
+* tracking services
+* information dissemination(transmission) services 信息传播
+* Emergency support systems
+* Location-sensitive billing
+  * toll payment
+
+#### LBS generations
+
+* 1st generation
+  * manual user input of location information
+* 2st
+  * locaiton information is acquired automatically within a couple of kilometers
+* 3st
+  * high position accuracy & automatic initiation of services
+
+#### LBS and their required Accuracy
+
+* High accuracy
+  * Asset tracking
+  * directions
+  * emergency
+* Medium to high accuracy
+  * advertising
+  * car navigation
+  * POI (point of interest)
+* Low accuracy
+  * fleet management
+  * news
+  * traffic information
+
+#### Location Engine
+
+* (reverse) Geocoding 地理编码
+  * translate street address to latitude & longitude and vice versa
+  * difficult if not complete information available
+* Routing & navigation
+  * compute best route: A*
+* Proximity search
+  * POIs such as ATMs
+
+### The important of locaiton privacy
+
+#### Location-based services
+
+* nearest neighbor queries
+  * Heart patient need closest hospitals
+* monitoring for traffic applications
+* Location-aware social networking
+  * finding friends
+* locaiton-based advertising
+  * send coupons to user close to the store
+
+#### Location Privacy
+
+* status of current mobile systems
+  * able to monitor,communicate and process information about person's locaiton
+  * have a high degree of spatial and temporal precision and accuracy
+  * might be linked with other data
+* Important research issue
+  * we need to protecting location privacy
+
+#### The importance of location privacy
+
+* Location-based spam
+* personal safety
+* intrusive inferences (people's information)
+  * people's view
+  * individual preferences
+  * health conditons
+
+### Techniques for location privacy
+
+* __Stealth__
+  * ability to be at a locaiton without anyone knowing your are there
+    * use a passive devices such as GPS
+    * cons
+      * active devices such as mobile phones cannot preserve stealth
+      * access of information overrides stealth
+* __Anonymity-based approaches__
+  * separate location information from an individual's identity
+    * special type is pseudonymity 笔名(nickname)
+    * Cons:
+      * weak to data mining
+      * a barrier to authentication and personalization
+* __K-Anonymity__
+  * A table is k-anonymous if every record in the table is indistinguishable from at least k − 1 other records with respect to quasi identifiers
+* __Anonymity: cloaking__
+  * __Spatial cloaking__
+    * ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0212004.png)
+  * __k-anonymity__
+    * Individuals are k-anonymous if their location information cannot be distinguished from k−1 other individuals
+  * __temporal cloaking 暂时的隐身__
+    * reduce the frequency of temporal information
+
+![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0212052.png)
+
+### Location privacy through Obfuscation  迷惑
+
+> Obfuscation
+
+people are more prepared to reveal their locaiton to some degree the less precise the location is
+
+#### Obfuscation
+
+* mask an individual's precision
+* decrease the quality of information about an individual's location
+* identity can be revealed
+  * assumption
+    * spatial imperfection = privacy
+    * The greater the imperfect knowledge about a user's location, the greater the user's privacy
+
+![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0212496.png)
+
+#### l-Diversity
+
+* A q*-block is l-diverse if contains at least l "well represented" values for the sensitive attribute S
+* A table is l-diverse if every q*-block is l-diverse
+* An attacker needs l-1 damaging pieces of background knowledge to eliminate all l-1 possible sensitive values
+
+### Decentralised approach to Location privacy
+
+#### Centralized approaches
+
+![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0212738.png)
+
+__Limitations__
+
+* communication overheads
+* security threats
+* single point of failure
+
+#### If you do not trust anyone, go decentralized approach
+
+Idea
+
+* Use WPANs
+* Clique
+* do not disclose your precise position to anyone
+* be k-anonymous to your lBS provider
+
+Rules:
+
+* Hide service request from mobile phone operator |, i.e., separate an agent's request (query requestor) from the agent requesting this service (query initiator)
+
+---
+
+## L7 Mobile GUIs
+
+#### Programming mobile devices (fundamental approaches)
+
+* __Server-based approach__
+  * create web service
+  * client accesses the content via a browser
+* __Device-based approach__
+  * develop app with an SDK
+  * deploy the applicaiton locally on the mobile devices
+
+#### UX Design Priciples
+
+* __Minimize the amount of work__ required for a task
+* Acknowledge __limitations of users__
+  * only show information that is require
+* acknowledge __user mistakes__
+  * Anticipate and prevent them
+* Acknowledge __human memory__
+  * do not rely on human memory
+* Various __tidbits__ 花边
+  * decide whether to stand out in terms of being different or novel or if a task has to avoid distraction
+
+#### The life cycle of a MIDlet
+
+![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0213385.png)
+
+#### MIDP GUI Programming
+
+* MIDP vs AWT
+  * AWT is designed for PCs
+  * AWT for mouse
+  * AWT supports window managements
+* __smartphones__ have different requirements
+  * a single screen
+  * no overlapping windows ( no window manager required)
+  * no complex tables
+  * input often limited to keypad or virtual keyboards
+
+#### Input mechanisms in mobile
+
+* keypad
+* keyboard
+* Pen-based input
+* voice input
+
+#### UI support
+
+The difference in mobile like __screen size, screen orientation, input capabilities__
+
+__Abstraction__
+
+* use abstarct descriptions: provide a "Cancel" button
+* less code in your applicaiton
+
+#### High-level user interfaces
+
+Goal: __portability __  为了多平台共用方便
+
+* high degree of abstraction
+* no dedicated (focus) control of look and feel
+* applicaiton uses native look and feel
+* good end-user experience
+
+consequences:
+
+* drawing is performed by the OS of the device
+* navigation & low-level functions are done by the device
+
+#### low-level user interfaces
+
+Goal: __precise control and placement__  为了让用户使用更方便
+
+* Games, charts, graphs
+* control of what is drawn on the display
+* handel events such as key presses and releases
+* access specific keys
+
+consequences for portabilty
+
+* Platform-independent methods   这样设计不同平台就得单独设计
+* Discover the size of the display, orientation, other capabilities
+
+#### (MIDP) GUI Guidelines
+
+| Ensure portability across different devices | KISS principle                      |
+| ---------------------------------------- | ----------------------------------- |
+| Use high-level API                       | Simple and easy to use UI           |
+| Use platform independent parts of low-level API | Minimize user input and offer lists |
+| Discover screen resolutions              | Pre-select likely choices           |
+
+#### UI Elements
+
+* Buttons
+  * intercpets touch events and sends an action msg to a target object when tapped
+* Checkboxes & radio buttons:
+  * select one or more options from a set
+* Switches
+  * On/off buttons
+* Segmented controls
+  * horizontal control made of multiple segments
+* Stepper
+  * {+ -}
+* Slider
+  * 滑动条 select a single value
+* Popup menus
+  * menu interface
+* Pickers
+  * pick a time or pick a date
+* UITextField
+  * Displays editable text and sends an action msg to a target object when user presses the return button
+* UITextView
+  * Support a scrollable, multiline, editable text region for larger texts
+* UILable
+  * Implements a read-only text view
+* TextView
+  * displays text to the user and optinally allows them to edit it
+* EditTExt
+* Attributes
+  * URLs and email addresses are 
+* Images
+  * a view-based container for displaying either a single image or animating images
+* Lists
+  * means for displaying and editing hierarchical lists of informtion
+* Alerts & Dialogs
+  * display an alrt message to the user
+* Collections
+  * oedered collection of data items and presents them using customizable layouts
+* Scroll views
+* Navigation
+* Refresh
+
+![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0214569.png)
+
+---
+
+## L8 Wireless Sensor Networks
+
+> routing in WSNs
+
+Wireless advantage: all neighbors in broadcasting range listen
+
+__Unit Distance Graph__ (UDG)
+
+* communication range is same for all nodes
+* Connectivity graph of nodes: nodes are connected if their  normalized distance is less than 1 
+
+#### Communication
+
+* Communication is expensive (use only if necessary)
+* A node communicates only with its neighbors
+* wireless advantage: all negibors broadcasting range listen
+
+#### Criteria for routing algorithms (SUQ)
+
+* __Size__ of the routing table
+* __Quality__ of the route for a given destination
+* __Update cost__
+
+> MANET在计算机技术方面定义为移动自组网络的工作组，全称为Mobile Ad-hoc NETworks。
+>
+> WSN wireless sensor network
+
+Wireless Sensor networks are MANETs, but with
+
+* larger nodes
+* fault tolerance : sensor nodes are more prone to failure
+* energy-awareness : nodes have a very limited amount of energy
+
+#### Terminology
+
+* Routing
+  * Transport msg between two nodes
+* Data dissemination
+  * transport msg from a node to many nodes
+* Broadcasting
+  * transport msgs from a node to all nodes
+* Data gathering
+  * Transport msg from nodes to a sink
+* Base station
+  * node providing a gateway or central processing
+* Sink
+  * Node requesting information
+* Source
+  * node generating information (event)
+* Interest
+  * message requesting a certain type of information
+
+#### Sensor network architectures
+
+* __Layered__ architecture
+  *  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0215407.png)
+* __Flat__ architecture
+  * each node has the same role
+* __Hierarchical or clustered__ architecture
+  * nodes are organized into clusters
+  * nodes sends msg to cluster heads CHs
+  * CHs send their msg to base station (BS)
+  *  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0215477.png)
+
+### Topology-based Routing
+
+* proactive protocols
+  * compute routes before routing
+* reactive protocols
+  * discover routes on-demand
+* hybrid protocols
+  * compute routes once, then update
+
+#### Flooding
+
+* Each node that receives a message __broadcasts__ this message if
+  * the node is not a goal node
+  * the maximum hop count is not reached
+* It's a reactive protocol
+  * requires no topology maintenance
+  * no route discovery necessary
+  * often used as backup strategy:
+
+Cons: 
+
+* Implosion
+  * a node often receives the same msg from different neighbors
+* Duplication
+  * Nodes send the same msg to their neighbors
+* Resource blindness
+  * not aware of the energy levels of the mobile device
+
+#### Gossiping
+
+* Limited broadcast
+  * nodes do not broadcast received msg to every neighbor but only to a __randomly__ selected neighbor
+* pros
+  * No implosion and lower overhead
+* Cons
+  * long travel time for msg
+  * no delivery guarantee
+
+
+
+|           | Technique                                | Advantage                                | Disadvantage                             |
+| --------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| Flooding  | each node thatreceives a messagebroadcasts thismessage if: thenode is not a goalnode; the max-imum hop count isnot reached | no topology maintenance;no complex route discov-ery | Implosion: receive samemessage from differentneighbors; Duplication:nodes send the same mes-sage to their neighbors;Resource blindness: notaware of the energy levelsof the mobile device |
+| Gossiping | Limited broadcast:nodes broadcast re-ceived messages toa randomly selectedneighbor | no implosion and loweroverhead           | long travel time for mes-sages; no delivery guaran-tee |
+
 `TODO`
+
+#### Rumor Routing
+
+* Agent-based algorithm
+  * A compromise between query flooding and event flooding
+    * spread information from both
+    * use only linear paths to preserve energy
+  * long-lived msg
+  * agents inform other sinks about events
+  * routes are not optimal
+
+Cons:
+
+* No delivery gurantee
+* Performance depends to topology
+
+
+
+`TODO`
+
+---
+
+## L9 Mobile Networks
+
+#### Wireless personal Area networks
+
+* WPAN
+  * Bluetooth
+  * ZigBee
+* WLAN
+* WWAN
+* satellite
+
+
+
+#### Bluetooth
+
+__Goal__
+
+* Ad-hoc wireless connectivity for electronic devices
+* Low-cost replacement for wires
+
+__Radio Technology__
+
+* Short-range: 10m-100m
+* Unlicensed ISM frequency band
+* 1 mW transmission power
+* 2 Mbps
+
+__Networking__
+
+* point to point
+* point to multipoint: ad-hoc networking of up to 8 devices
+* one device acts as a master, the other devices as slaves
+
+#### ZigBee in Action
+
+__Goal__
+
+* wireless standard for sensing and control applications
+* highly reliable and secure, interoperable
+
+__ZigBee__
+
+* Extremely low power
+* 200 kbps maximum
+* sensors, interactive toys, remote controls
+* have Routing protocol : AODV
+
+#### Comparison ZIgBee vs Bluetooth
+
+| ZIgBee                                   | Bluetooth                             |
+| ---------------------------------------- | ------------------------------------- |
+| Smaller packets over a large network:2^64 | larger packets over a small network:8 |
+| low memory requirement: 4-32KB           | require more system resources: 250KB  |
+| Rapid network joins in milliseconds      | Long network joins in seconds         |
+| Very Low cost: less than one dollar      | Complex design                        |
+| Small bandwidth                          | Medium bandwidth                      |
+| Medium range:10-100m                     | Medium range 10m (up to 100m)         |
+| Battary lifetime: years                  | Battery lifetime: days                |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
