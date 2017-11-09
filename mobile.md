@@ -9,17 +9,29 @@ typora-copy-images-to: ./mobile_image
 `Author : Min Gao` 
 
 > [Week 1](#L1) – All Slides
+>
 > [Week 2](#L2 - UX research) – All Slides
+>
 > [Week 3](#L3 - Mobile Interaction Design) – All Slides
+>
 > [Week 4](#L4 - Progessing Sensor Data) – All Slides
+>
 > [Week 5](#L5 - Context & Activity RECOGNITION) – All Slides
+>
 > [Week 6](#L6 - RFID) – RFID – Slides 1 to 39
+>
 > [Week 6](#L6 - Mobile Games) - Mobile Games – Slides 1 to 27
+>
 > [Week 7](#L7 Location Privacy) – Location Privacy – Slides 1 to 34, 43 to 44, 46 to 47
+>
 > [Week 7](#L7 Mobile GUIs) – Mobile GUIs – Slides 1 to 44
+>
 > [Week 8](#L8 Wireless Sensor Networks) - Wireless Sensor Networks – Slides 1 to 76
+>
 > [Week 9](#L9 Mobile Networks) - Mobile Networks – Slides 1 to 37
+>
 > Week 10 – Advanced Topics – Not Examinable
+>
 > Week 11 - Not Examinable
 
 ## L1
@@ -576,7 +588,7 @@ __Tag__
 
 __Reader__
 
-* Query tags via __radio signals__
+* Query tags via __radio signals__    无线电信号
 
 > Example: Visa payWave, payPass
 
@@ -719,7 +731,7 @@ Partial overlap leads to maximum throughput of a 18.4%
 
 | Protocol            | +                                        | -                                        |
 | ------------------- | ---------------------------------------- | ---------------------------------------- |
-| ALOHA               | Adapts quickly to changing<br />numbers of tags<br />Simple reader design | Worst case: never finishes<br />__Small throughput__ |
+| ALOHA               | Adapts quickly to changing<br />numbers of tags<br />Simple reader design | Worst case: __never finishes__<br />__Small throughput__ |
 | Slotted ALOHA       | __Doubles throughput__                   | Requires synchronization<br />__Tags have to count slots__ |
 | Frame-slotted-ALOHA | Avoids frequently responding tags        | Frame size has to be known or transmitted<br />similar to slotted ALOHA |
 
@@ -829,7 +841,7 @@ __Overview__:
   * Query the status of keys
     * is a key pressed and which key is pressed
     * Duration of a key press
-    * are keys pressed simultaneously or repeatedlt
+    * are keys pressed simultaneously or repeatedly
 * Layers
   * sprites and tiled layers
   * can be visible or invisible
@@ -843,7 +855,7 @@ __Overview__:
     * Ordered list of frames to be shown
     * Frames can be omitted, repeated
     * Sprite is n frames
-* tiles
+* tiles (small image)
   * Tile is a small image that can be combined with other tiles to larger images
   * 2D games with large background images are composed of tiles
   * A set of tiles is small, little memory required
@@ -1311,26 +1323,27 @@ Wireless Sensor networks are MANETs, but with
 
 #### Terminology
 
-* Routing
+* __Routing__
   * Transport msg between two nodes
 * Data dissemination
-  * transport msg from a node to many nodes
+  * transport msg from a node to __many nodes__
 * Broadcasting
   * transport msgs from a node to all nodes
 * Data gathering
-  * Transport msg from nodes to a sink
-* Base station
+  * Transport msg from nodes to a __sink__
+* Base station (BS)
   * node providing a gateway or central processing
-* Sink
+* __Sink__
   * Node requesting information
 * Source
   * node generating information (event)
-* Interest
+* __Interest__
   * message requesting a certain type of information
 
 #### Sensor network architectures
 
 * __Layered__ architecture
+  * a single powerful base station with layers
   *  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0215407.png)
 * __Flat__ architecture
   * each node has the same role
@@ -1340,13 +1353,15 @@ Wireless Sensor networks are MANETs, but with
   * CHs send their msg to base station (BS)
   *  ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0215477.png)
 
-### Topology-based Routing
+### Topology-based Routing (3 type)
 
-* proactive protocols
+> use information about links in the network
+
+* __proactive__ protocols
   * compute routes before routing
-* reactive protocols
+* __reactive__ protocols
   * discover routes on-demand
-* hybrid protocols
+* __hybrid__ protocols
   * compute routes once, then update
 
 #### Flooding
@@ -1354,18 +1369,18 @@ Wireless Sensor networks are MANETs, but with
 * Each node that receives a message __broadcasts__ this message if
   * the node is not a goal node
   * the maximum hop count is not reached
-* It's a reactive protocol
+* It's a __reactive__ protocol
   * requires no topology maintenance
   * no route discovery necessary
-  * often used as backup strategy:
+  * often used as __backup strategy__
 
 Cons: 
 
-* Implosion
+* __Implosion__
   * a node often receives the same msg from different neighbors
 * Duplication
   * Nodes send the same msg to their neighbors
-* Resource blindness
+* __Resource blindness__
   * not aware of the energy levels of the mobile device
 
 #### Gossiping
@@ -1373,24 +1388,56 @@ Cons:
 * Limited broadcast
   * nodes do not broadcast received msg to every neighbor but only to a __randomly__ selected neighbor
 * pros
-  * No implosion and lower overhead
+  * No __implosion__ and __lower overhead__
 * Cons
-  * long travel time for msg
-  * no delivery guarantee
+  * __long travel time__ for msg
+  * __no delivery guarantee__
 
+#### Locality insensitivity (Radius Growth)
 
+Destination is a few hops away but the entire network is flooded.
 
-|           | Technique                                | Advantage                                | Disadvantage                             |
-| --------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| Flooding  | each node thatreceives a messagebroadcasts thismessage if: thenode is not a goalnode; the max-imum hop count isnot reached | no topology maintenance;no complex route discov-ery | Implosion: receive samemessage from differentneighbors; Duplication:nodes send the same mes-sage to their neighbors;Resource blindness: notaware of the energy levelsof the mobile device |
-| Gossiping | Limited broadcast:nodes broadcast re-ceived messages toa randomly selectedneighbor | no implosion and loweroverhead           | long travel time for mes-sages; no delivery guaran-tee |
+__solution__: Flood with growing radius; using slow flooding
+
+* a timeout for nodes before a message is forwarded
+
+#### Source routing
+
+> Node store routing information for other nodes
+
+* source node stores the whole path to the destination
+* source node encodes the path with every message
+* nodes on the path remove their ID from the message before relaying the message to the next node.
+
+#### Dynamic source routing
+
+> improving source routing
+
+* caching of routes
+* Local search: flooding with TTL+1
+* Hierarchy of nodes: nodes with the same IP prefix are in the same direction
+* CLustering
+* Implicit acknowledgement: symmetric links
+
+#### Directed Diffusion (定向扩散)
 
 `TODO`
+
+#### flooding
+
+* Query flooding
+  * A node __interested__ in an event floods the network  (message requesting a certain type of information)
+  * Transmission for n nodes: Q * n (Q is the number of Queries)
+* Event flooding
+  * A node __sensing__ an event floods the network
+  * Transmission for n nodes : E * n (E is the number of events)
 
 #### Rumor Routing
 
 * Agent-based algorithm
-  * A compromise between query flooding and event flooding
+
+
+* * A compromise between query flooding and event flooding
     * spread information from both
     * use only linear paths to preserve energy
   * long-lived msg
@@ -1402,13 +1449,51 @@ Cons:
 * No delivery gurantee
 * Performance depends to topology
 
+ ![screenshot](/Users/heaven/Projects/UNIMELB-IT_Y2_SEMESTER2_REVIEW/mobile_image/screenshot-0227936.png)
 
+#### Sample attack scenario
+
+* Pretend to be close to the sink
+* attract many packets
+* Drop some or all of them
+* DoS attacks for geographic routing protocols
 
 `TODO`
 
 ---
 
 ## L9 Mobile Networks
+
+> Analog signal	模拟信号
+>
+> carrier signal 	载波信号
+>
+> digital signal
+
+#### benefits of digital networks
+
+* efficiency
+* security
+* Degradation and restoration
+* Error detection
+
+#### Switching Mechanisms
+
+* Circuit Switching
+  * establish a physical connection between sender and receiver
+* packet swithcing
+  * share a connection between users
+
+#### Multiplexing in 4 dimensions
+
+* Space
+* Frequency
+* Time
+* Code
+
+
+
+
 
 #### Wireless personal Area networks
 
@@ -1419,7 +1504,14 @@ Cons:
 * WWAN
 * satellite
 
+#### WPANs
 
+> wireless personal area networks
+
+* short ranges
+* low power consumption
+* low cost
+* small networks
 
 #### Bluetooth
 
@@ -1441,7 +1533,7 @@ __Networking__
 * point to multipoint: ad-hoc networking of up to 8 devices
 * one device acts as a master, the other devices as slaves
 
-#### ZigBee in Action
+#### ZigBee
 
 __Goal__
 
@@ -1467,11 +1559,93 @@ __ZigBee__
 | Medium range:10-100m                     | Medium range 10m (up to 100m)         |
 | Battary lifetime: years                  | Battery lifetime: days                |
 
+Bluetooth 比 ZigBee 网络小，需求资源多，长加入时间，复杂设计，稍高带宽，相同range， 更少电力时间
 
 
 
+#### other:
 
+9.1.6 Multiplexing
 
+\1. Idea
+• Multiple channels share one medium with minimal interference
+
+\2. Multiplexing in 4 dimensions
+
+• Space
+• Frequency
+• Time
+• Code
+
+\3. Guard spaces
+• Reduce risk of interference between channels
+
+\4. Space Division Multiplexing
+
+(a) SDM
+• Communication using a single channel
+• Space channels physically apart to avoid interference
+
+(b) Cellular network
+• Reuse frequencies if certain distance between the base stations
+
+• How often can we reuse frequencies?• Graph colouring problem
+
+37
+
+\5. Frequency Division Multiplexing(a) FDM
+
+• Division of spectrum into smaller non-overlapping frequency bands with guard spacesbetween to avoid overlapping
+
+• Channels gets band of the spectrum for the whole time(b) Advantages
+
+• No dynamic coordination required
+
+• Can be used for analog networks(c) Disadvantages
+
+• Waste of bandwidth if traffic distributed unevenly• Guard spaces
+
+\6. Time Division Multiplexing
+
+(a) TDM
+i. A channel gets the whole spectrum for a short time
+
+ii. All channels use same frequency at different timesiii. Co-channel interference: overlap of transmissions
+
+(b) Advantage
+• High throughput for many channels
+
+(c) Disadvantage
+• Precise clock synchronisation
+
+\7. Combining FDM & TDM
+
+(a) FDM/TDM
+• Each channel gets a certain frequency band for a certain amount of time
+• More efficient use of resources
+
+(b) Advantage
+• Higher data rates compared to CDM
+• More robust against interference and tapping
+
+(c) Disadvantage
+• Precise clock synchronisation
+
+\8. Code Division Multiplexing
+
+(a) CDM
+• Each channel has a unique code (chipping sequence)
+
+• All channels use the same frequency
+• Each code must be sufficiently distinct for appropriate guard spaces
+• Uses spread spectrum technology
+
+(b) Advantages
+• No coordination and synchronisation required
+• Bandwidth efficient
+
+(c) Disadvantage
+• Lower user data rates
 
 
 
